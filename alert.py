@@ -1,6 +1,6 @@
 
 
-alert_flag = True
+alert_flag = False
 
 
 def alert(message,*args):

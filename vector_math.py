@@ -9,15 +9,41 @@ from clear_terminal import clear_terminal
 from alert import alert
 from timer import timer
 
+def orthogonal(a, b):
+    """returns the normalize orthogonal to the inputted vectors"""
+    a = np.round(a, 10)
+    b = np.round(b, 10)
+    assert a.shape == (3,), "a needs to be a vector"
+    assert b.shape == (3,), "b needs to be a vector"
+    if np.all(a == b): assert False, f"no orthogonal between {a} and {b}"
+    if not np.any(np.cross(a,b))  : assert False, f"no orthogonal between diametrically opposed vectors"
+    
+    return normalize(np.cross(a,b) )
+
+def angle(a, b):
+    """returns the minimum angle between two vectors expressed as degrees"""
+    assert a.shape == (3,), "a needs to be a vector"
+    assert b.shape == (3,), "b needs to be a vector"
+    if np.all(a == b): return 0
+    
+    dot_product = np.dot(a,b)
+    dot_product = round(dot_product,10)
+    angle = np.arccos(dot_product)
+    angle = np.degrees(angle)
+    return angle
 
 def magnitude(vector):
     assert vector.shape[1] == 3, "the magnitude function takes a LIST of vectors"
     return np.sqrt(np.sum(vector**2, 1))
 
 def normalize(vector): # operates on a list of vectors with three components a piece
+    single = False
+    if vector.shape[0] == 3:
+        single = True
+        vector = vector.reshape(1,3)
     assert vector.shape[1] == 3, "the normalize function takes a LIST of vectors"
+    if single: return (vector / magnitude(vector).reshape(-1,1) ).reshape(3)
     return vector / magnitude(vector).reshape(-1,1)
-
 
 def quaternion(vectors,x, transpose=False): # the transpose flag flips which array is arranged vertically and whihc is horizontal
     # this creates a multiplicative table of the two arrays and runs them through the quaternion table
@@ -32,7 +58,6 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
         x = x.reshape(4,1)
         x = np.tile(x,[count,1]).reshape(count,4,1)
         vectors = vectors.reshape(-1,1,4)
-
     timer('q reshape')
     t = vectors*x
     timer('q mult')
@@ -80,6 +105,8 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
         single_flag = True
     assert points.shape[1] == 3, "the arbitrary_axis_rotation function takes a LIST of vectors"
     assert rotation_axis.shape == (3,), "the rotation axis is not correctly shaped"
+    rotation_axis = normalize(rotation_axis.reshape(1,3)).reshape(3)
+    #print(f"normalized axis: {rotation_axis}")
     # rotation axis has to be a unit vector
     angle = np.radians(degrees)
 
