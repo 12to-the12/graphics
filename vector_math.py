@@ -5,6 +5,7 @@
 
 
 import numpy as np
+from numba import njit
 from clear_terminal import clear_terminal
 from alert import alert
 from timer import timer
@@ -45,6 +46,7 @@ def normalize(vector): # operates on a list of vectors with three components a p
     if single: return (vector / magnitude(vector).reshape(-1,1) ).reshape(3)
     return vector / magnitude(vector).reshape(-1,1)
 
+@njit
 def quaternion(vectors,x, transpose=False): # the transpose flag flips which array is arranged vertically and whihc is horizontal
     # this creates a multiplicative table of the two arrays and runs them through the quaternion table
     assert vectors.shape[1] == 4, f"the shape of vectors should be (-1,4) not {vectors.shape}"
@@ -125,6 +127,14 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
     if single_flag:
         return quaternion(x,qprime, transpose=True)[0,1:]
     return quaternion(x,qprime,transpose=True)[:,1:]
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     clear_terminal()

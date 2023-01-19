@@ -14,7 +14,7 @@ np.set_printoptions(suppress=True) # suppresses scientific notation
 clear_terminal()
 
 camera = Camera()
-camera.position    = np.array(( 0,-1, 0)) # x,y,z
+camera.position    = np.array(( 0, -1, 0)) # x,y,z
 camera.view_vector = np.array(( 0, 1, 0))
 camera.up_vector   = np.array(( 0, 0, 1))
 '''
@@ -43,8 +43,13 @@ geometry = geometry-camera.position
 # the world will be oriented with the camera pointeed straight down,
 # with the view vector towards -Z and the up vector towards +Y
 
-camera.rotate_yaw(-90) # left
+camera.rotate_yaw(0) # left
 camera.rotate_pitch(0) # up
 camera.rotate_roll(0) #
 
-camera.orient()
+axis_a, angle_a, axis_b, angle_b = camera.orient()
+print(axis_a, angle_a, axis_b, angle_b)
+geometry = arbitrary_axis_rotation(geometry,axis_b,angle_b) # not inverted angles
+geometry = arbitrary_axis_rotation(geometry,axis_a,angle_a) # not inverted angles
+
+print(geometry)
