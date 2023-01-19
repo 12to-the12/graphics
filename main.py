@@ -43,3 +43,8 @@ geometry = geometry-camera.position
 # the world will be oriented with the camera pointeed straight down,
 # with the view vector towards -Z and the up vector towards +Y
 
+camera.rotate_yaw(-90) # left
+camera.rotate_pitch(0) # up
+camera.rotate_roll(0) #
+
+camera.orient()
