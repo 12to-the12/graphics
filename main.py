@@ -1,8 +1,11 @@
+from timer import timer
+timer('start')
 
 import numpy as np
 from alert import alert
 from clear_terminal import clear_terminal
 from vector_math import arbitrary_axis_rotation
+
 clear_terminal()
 class Camera():
     def __init__(self):
@@ -34,13 +37,13 @@ camera = Camera()
 camera.position    = np.array(( 0,-1, 0)) # x,y,z
 camera.view_vector = np.array(( 0, 1, 0))
 camera.up_vector   = np.array(( 0, 0, 1))
-
+'''
 print(f"view:{camera.view_vector}")
 print(f"up:{camera.up_vector}")
 camera.rotate_pitch(45)
 print(f"view:{camera.view_vector}")
 print(f"up:{camera.up_vector}")
-
+'''
 geometry = np.array([[-1,2,0],[1,2,0]])
 # at this point in the pipeline all the geometry is defined relative to the world origin
 # now, we make it relative to the camera, both the coordinates and the rotation
@@ -52,14 +55,5 @@ geometry = geometry-camera.position
 # the second step is more difficult
 
 # this is where the inverse of the view transformation is performed
-import time
 
 
-
-for volume in range(4,9): 
-    vectors = np.arange(3*10**volume).reshape(-1,3)
-    tic = time.time()
-    vectors = arbitrary_axis_rotation(vectors,np.array([0,1,0]),45)
-    toc = time.time()
-    #print(toc-tic)
-    print(f"with {10**volume}:\t{10**volume/(toc-tic)} operations per second")

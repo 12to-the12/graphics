@@ -7,6 +7,7 @@
 import numpy as np
 from clear_terminal import clear_terminal
 from alert import alert
+from timer import timer
 
 
 def magnitude(vector):
@@ -32,8 +33,9 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
         x = np.tile(x,[count,1]).reshape(count,4,1)
         vectors = vectors.reshape(-1,1,4)
 
-    
+    timer('q reshape')
     t = vectors*x
+    timer('q mult')
     t = t.reshape(-1,4,4)
     
     valence = [
@@ -44,6 +46,7 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
         ]
 
     t = t*valence
+    timer('q valence')
     assert t.shape[1:] == (4,4), f"the t array is not shaped correctly, it should be a list of 4x4 matrices, not {t.shape}"
 
     s = t[:,0,0]+t[:,1,1]+t[:,2,2]+t[:,3,3]
@@ -51,6 +54,7 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
     j = t[:,0,2]+t[:,1,3]+t[:,2,0]+t[:,3,1]
     k = t[:,0,3]+t[:,1,2]+t[:,2,1]+t[:,3,0]
 
+    timer('q filter')
     """
     the previous coordinate summations implements the following quaternion table,
     with the negativity table accounting for the valence
@@ -63,6 +67,7 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
 
     """
     out = np.transpose(np.vstack((s,i,j,k))) # this creates a list of the four elements sijk vectors
+    timer('q transpose')
     assert out.shape[1] == 4, "the function returns a list of four elements vectors, not {out.shape}"
     return out # scalar, i ,j ,k
 
@@ -87,8 +92,9 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
     zeros = np.zeros((points.shape[0])).reshape(-1,1)
     u = np.concatenate((zeros, points),axis=1)
     
-
+    timer('pre calculation')
     x = quaternion(u,q)
+    timer('quaternion')
     if single_flag:
         return quaternion(x,qprime, transpose=True)[0,1:]
     return quaternion(x,qprime,transpose=True)[:,1:]
