@@ -1,14 +1,19 @@
-import numba
-import random
+import numpy as np
+from numba import njit
+@njit(debug=True)#(float64[:](float64[:],float64[:],boolean))
+def quaternion(vector,x, transpose=False): # the transpose flag flips which array is arranged vertically and which is horizontal
+    # this creates a multiplicative table of the two arrays and runs them through the quaternion table
+    assert vector.shape == (4,), "the given vector needs to have four elements"
+    
+    if transpose:
+        print(vector.shape)
+        vector = np.expand_dims(vector, 1)
+    else:
+        x = np.expand_dims(x, 1)
+    
+    a = 1
+    print(vector.shape)
 
-@numba.jit
-def monte_carlo_pi(n_samples: int):
-    acc = 0
-    for i in range(n_samples):
-        x = random.random()
-        y = random.random()
-        if (x**2 + y**2) < 1.0:
-            acc += 1
-    return 4.0 * acc / n_samples
+    return 1 # scalar, i ,j ,k
 
-print(monte_carlo_pi(10000000))
+print(quaternion(np.array([0,7,2,5]),np.array([-0.5,0.5,0.5,0.5])))
