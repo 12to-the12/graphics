@@ -34,8 +34,11 @@ sin of theta = opposite/hypotenuse
 cos of theta = adjacent/hypotenuse
 tan of theta = opposite/adjacent
 
-## coordinate space pipeline
+## geometry  pipeline
 
-1. object space: vertexes are defined relative to their object origin
-2. world space:  vertexes are defined relative to the world origin
-3. 
+1. object coordinates: vertexes are defined relative to their object origin
+2. world coordinates: vertexes are defined relative to the world origin
+3. camera space: vertexes are defined relative to the camera's perspective aka eye/view space
+4. projection space: 2d points
+4. clip space: 2d points where anything over |1| is out
+5. screen space: coordinates that correspond to a position on the screen

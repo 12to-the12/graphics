@@ -18,7 +18,7 @@ def orthogonal(a, b):
     if np.all(a == b): assert False, f"no orthogonal between {a} and {b}"
     if not np.any(np.cross(a,b))  : assert False, f"no orthogonal between diametrically opposed vectors"
     
-    return normalize(np.cross(a,b) )
+    return norm(np.cross(a,b) )
 
 def angle(a, b):
     """returns the minimum angle between two vectors expressed as degrees"""
@@ -101,7 +101,7 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
         single_flag = True
     assert points.shape[1] == 3, "the arbitrary_axis_rotation function takes a LIST of vectors"
     assert rotation_axis.shape == (3,), "the rotation axis is not correctly shaped"
-    rotation_axis = normalize(rotation_axis.reshape(1,3)).reshape(3)
+    rotation_axis = norm(rotation_axis)
     #print(f"normalized axis: {rotation_axis}")
     # rotation axis has to be a unit vector
     angle = np.radians(degrees)
@@ -137,9 +137,17 @@ if __name__ == "__main__":
     
     x = arbitrary_axis_rotation(vectors,rotation_axis,theta)
 
+    rotation_axis = np.random.randint(1,10,size=(3))
+    vectors = np.random.randint(10,size=(1000,3))
+    vectors = vectors.astype('float64')
+    tic = time.time()
+    arbitrary_axis_rotation(vectors,rotation_axis,theta)
+    toc = time.time()
+
     print('<start>\n')
 
     for size in [1000, 10_000, 100_000, 1_000_000, 10_000_000]: # ten million seems to be the scalable limit
+        rotation_axis = np.random.randint(1,10,size=(3))
         vectors = np.random.randint(10,size=(size,3))
         vectors = vectors.astype('float64')
 

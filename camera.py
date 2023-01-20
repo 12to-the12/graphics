@@ -5,16 +5,23 @@ from vector_math import orthogonal, angle
 from ignore import ignore
 from clear_terminal import clear_terminal
 from alert import alert
+import math
+from entity import entity
 
+class Camera(entity):
+    def __init__(self, aspect_ratio=2, focal_length=5, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
+        """aspect ratio is width over height, ergo width if height was one"""
+        self.aspect_ratio = aspect_ratio
+        self.focal_length = focal_length
+        self.sensor_width = sensor_width
+        self.close_cull   = close_cull
+        self.far_cull     = far_cull
 
-class Camera():
-    def __init__(self):
-        pass
-    def __str__(self) -> str:
-        return f"camera view_vector: {self.view_vector}"
-    def translate(self,change):
-        assert change.shape == (3), f"change should be an array with three elements, not {change.shape}"
-        self.position = self.position + change
+        self.fov = math.degrees(  2 * math.atan( sensor_width / ( 2 * focal_length )  )  )
+        self.focal_ratio = 2 * focal_length / sensor_width
+
+    
+    
 
 
     def orient(self):
