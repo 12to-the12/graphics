@@ -2,13 +2,13 @@
 import numpy as np
 from vector_math import arbitrary_axis_rotation, normalize
 from vector_math import orthogonal, angle
-from ignore import ignore
 from clear_terminal import clear_terminal
 from alert import alert
 import math
-from entity import entity
+from entity import Entity
 
-class Camera(entity):
+class Camera(Entity):
+    """a camera entity derived from the entity class"""
     def __init__(self, aspect_ratio=2, focal_length=5, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
         """aspect ratio is width over height, ergo width if height was one"""
         self.aspect_ratio = aspect_ratio
@@ -47,6 +47,7 @@ class Camera(entity):
             # view vector with -Z to the up vector
             intermediary_up   = arbitrary_axis_rotation(self.up_vector,  axis_a,angle_a)
         else:
+            intermediary_up = self.up_vector
             axis_a = n_Z 
 
 
@@ -96,25 +97,7 @@ class Camera(entity):
 
 
 
-    # these rotations operate in camera space
-    # assuming the vector is pointing towards you, 
-    # counter clockwise is the positive direction of rotation
-    def rotate_pitch(self,degrees):
-        # y and z, x is the vector
-        # nodding, upwards nod is positive
-        
-        cross = np.cross(self.view_vector,self.up_vector)
-        self.up_vector   = arbitrary_axis_rotation(self.up_vector, cross, degrees)
-        self.view_vector = arbitrary_axis_rotation(self.view_vector, cross, degrees)
-        
-    def rotate_yaw(self,degrees):
-        # x and y, z is the vector
-        # shaking head, left rotation is positive
-        self.view_vector = arbitrary_axis_rotation(self.view_vector, self.up_vector, degrees)
-    def rotate_roll(self,degrees):
-        # x and z, y is the vector
-        # side to side, indian head nod, rolling right is positive
-        self.up_vector = arbitrary_axis_rotation(self.up_vector, self.view_vector, degrees)
+
     
 
 if __name__ == "__main__":

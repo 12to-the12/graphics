@@ -66,6 +66,7 @@ def project_screen_coordinates(coordinates, screen):
 
     coordinates *= [h_res, v_res]
     return coordinates
+    
 if __name__ == "__main__":
     alert('<initializing camera>')
     from camera import Camera

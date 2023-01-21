@@ -39,7 +39,7 @@ def mag(vector):
 
 @njit
 def magnitude(vector):
-    #assert vector.shape[1] == 3, "the magnitude function takes a LIST of vectors"
+    assert vector.shape[1] == 3, "the magnitude function takes a LIST of vectors"
     return np.sqrt(np.sum(vector**2, 1))
 
 @njit
@@ -47,10 +47,10 @@ def norm(vector): # operates on a single vector
     assert vector.shape[0] == 3, "the normalize function takes a SINGLE vector"
     return vector / mag(vector)
 
-@njit
+#@njit(float64[:,:](float64[:,:]) )
 def normalize(vectors): # operates on a list of vectors with three components a piece
     assert vectors.shape[1] == 3, "the normalize function takes a LIST of vectors"
-    return vectors / magnitude(vectors)
+    return vectors / magnitude(vectors).reshape(-1,1)
 
 def quaternion(vectors,x, transpose=False): # the transpose flag flips which array is arranged vertically and whihc is horizontal
     # this creates a multiplicative table of the two arrays and runs them through the quaternion table
@@ -65,9 +65,9 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
         x = np.tile(x,[count,1]).reshape(count,4,1)
         vectors = vectors.reshape(-1,1,4)
 
-    timer('q reshape')
+    #timer('q reshape')
     t = vectors*x
-    timer('q mult     ')
+    #timer('q mult     ')
     t = t.reshape(-1,4,4)
     
 
@@ -77,7 +77,7 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
     i = t[:,0,1]+t[:,1,0]+t[:,2,3]-t[:,3,2]
     j = t[:,0,2]-t[:,1,3]+t[:,2,0]+t[:,3,1]
     k = t[:,0,3]+t[:,1,2]-t[:,2,1]+t[:,3,0]
-    timer('q filter')
+    #timer('q filter')
     """
     the ^previous coordinate summations implements the following quaternion table
     x    1  i  j  k  
@@ -88,13 +88,15 @@ def quaternion(vectors,x, transpose=False): # the transpose flag flips which arr
     k|   k  j -i -1
     """
     out = np.transpose(np.vstack((s,i,j,k))) # this creates a list of the four elements sijk vectors
-    timer('q transpose')
+    #timer('q transpose')
     assert out.shape[1] == 4, "the function returns a list of four elements vectors, not {out.shape}"
     return out # scalar, i ,j ,k
 
 
 
 def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
+    """currently, THE function it currently operate at around one million operations for
+    all below 10,00, and round two million for anything up to ten million beyond that"""
     single_flag = False
     if len(points.shape) == 1:
         points = points.reshape(1,-1)
@@ -116,9 +118,9 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
     zeros = np.zeros((points.shape[0])).reshape(-1,1)
     u = np.concatenate((zeros, points),axis=1)
     
-    timer('pre calc')
+    #timer('pre calc')
     x = quaternion(u,q)
-    timer('quaternion')
+    #timer('quaternion')
     if single_flag:
         return quaternion(x,qprime, transpose=True)[0,1:]
     return quaternion(x,qprime,transpose=True)[:,1:]

@@ -19,6 +19,8 @@ textured materials
 reflection and refraction
 obj handling
 radiance mapping
+depth of field
+shaders
 
 ## conventions
 
