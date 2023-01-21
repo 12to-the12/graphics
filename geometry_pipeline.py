@@ -30,29 +30,29 @@ def project_in_camera_space(geometry, camera):
 def project_in_screen_space(geometry, camera):
     """projects camera space coordinates in eye space"""
     assert geometry.shape[1] == 3, "geometry needs to be a table of points"
-    alert(geometry)
+    #alert(geometry)
     xyw = np.array([ 1, 1,-1])
     geometry *= xyw
     xy = geometry[ :,:2]
     w  = geometry[ :, 2]
-    alert(f"xy:{xy}")
-    alert(f"w:{w}")
+    #alert(f"xy:{xy}")
+    #alert(f"w:{w}")
     xy /= w.reshape(-1,1)
-    alert(f"xy:{xy}")
-    alert([camera.focal_ratio, camera.focal_ratio * camera.aspect_ratio])
+    #alert(f"xy:{xy}")
+    #alert([camera.focal_ratio, camera.focal_ratio * camera.aspect_ratio])
     xy *= [camera.focal_ratio, camera.focal_ratio * camera.aspect_ratio] # half height
-    alert(f"xy:{xy}")
+    #alert(f"xy:{xy}")
     
     # cull close and far
     pass_table = (camera.close_cull <= w) & ( w <= camera.far_cull)
     xy = xy[pass_table]
     
-    alert('culling')
+    #alert('culling')
     # cull left right top bottom
     pass_table = (-1 <= xy) & ( xy <= 1)
     pass_table = ~np.any( ~pass_table, axis=1)
     xy = xy[pass_table]
-    alert(f"xy:{xy}")
+    #alert(f"xy:{xy}")
 
     return xy
 

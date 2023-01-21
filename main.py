@@ -4,21 +4,14 @@ clear_terminal()
 from alert import alert
 alert('<importing>')
 
-
 from timer import timer
 from vector_math import arbitrary_axis_rotation, normalize
 from vector_math import orthogonal, angle
 import random
 
-
-
 alert('<initializing numpy>')
-# initialize numpy
 import numpy as np
 np.set_printoptions(suppress=True) # suppresses scientific notation
-
-
-
 
 alert('<initializing camera>')
 from camera import Camera
@@ -26,15 +19,6 @@ camera = Camera()
 camera.position    = np.array(( 0, -50, 0)) # x,y,z
 camera.view_vector = np.array(( 0, 1, 0))
 camera.up_vector   = np.array(( 0, 0, 1))
-
-
-
-alert('<rotating camera>')
-camera.rotate_yaw(0) # left
-camera.rotate_pitch(0) # up
-camera.rotate_roll(0) #
-
-
 
 alert('<initializing pygame>')
 import pygame
@@ -44,31 +28,17 @@ screen = pygame.display.set_mode((h_res, v_res))
 
 clock = pygame.time.Clock()
 
-alert('<initializing geometry>')
-geometry = np.array([
-    [-2,2,-2],[-2,2,2],[2,2,-2],[2,2,2],
-    [-2,2,-2],[-2,2,2],[2,2,-2],[2,2,2],
-    [-2,-2,-2],[-2,-2,2],[2,-2,-2],[2,-2,2],
-    [-2,-2,-2],[-2,-2,2],[2,-2,-2],[2,-2,2]
+cube = np.array([
+    [-2., 2.,-2.],[-2., 2., 2.],[ 2., 2.,-2.],[ 2., 2., 2.],
+    [-2., 2.,-2.],[-2., 2., 2.],[ 2., 2.,-2.],[ 2., 2., 2.],
+    [-2.,-2.,-2.],[-2.,-2., 2.],[ 2.,-2.,-2.],[ 2.,-2., 2.],
+    [-2.,-2.,-2.],[-2.,-2., 2.],[ 2.,-2.,-2.],[ 2.,-2., 2.]
     ])
 from geometry_pipeline import project_in_camera_space
 from geometry_pipeline import project_in_screen_space
 from geometry_pipeline import project_screen_coordinates
 
-alert('<projecting geometry>')
 
-
-
-print()
-
-
-'''
-from ray_cast import ray_cast
-from ray_cast import generate_rays
-geometry = generate_rays(10,10,2, random=True, norm=True)
-geometry = np.concatenate([np.array([[0,0,0]]),generate_rays(10,10,2, random=True, norm=False),geometry])
-ray_cast(screen=screen,camera=camera)
-'''
 import time
 alert('<running loop>')
 
@@ -80,9 +50,14 @@ from mesh import Mesh
 from render import render
 from scene import Scene
 # triaga
-mesh = Mesh()
-mesh.build(Object.get_objects() )
+
+scene = Scene()
+scene.add_object( cat )
+scene.camera = camera
+
 cat.origin_to_geometry()
+x = 0
+count = 0
 while True:
     tic = time.time()
     # Process player inputs.
@@ -90,32 +65,27 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             raise SystemExit
-
-    # Do logical updates here.
-    # ...
+    timer('event loop')
+            
     cat.rotate(1, axis='Z',local=False)
+    timer('rotating')
     cat.rotate(1, axis='Z',local=True)
-    #cat.scale(1.01)
-    #camera.translate(np.array([0,0.1,0]))
-    timer('rotate geometry')
-    mesh.build(Object.get_objects() )
-    timer('build')
-    geo = project_in_camera_space(mesh.geometry, camera)
-    coords   = project_in_screen_space(geo, camera)
-    coords   = project_screen_coordinates(coords, screen)
-    timer('project')
-    screen.fill("white")  # Fill the display with a solid color
-    for coord in coords:
-        pygame.draw.circle(screen, (0,0,0), coord, 1)
-    # Render the graphics here.
-    # ...
-    timer('draw')
+    timer('rotating')
+    image = render(canvas=screen, scene=scene)
+    
+    screen.blit(image, (0,0) )
+    timer('blitting')
     pygame.display.flip()  # Refresh on-screen display
-    timer('flip')
     #clock.tick(60)         # wait until next frame (at 60 FPS)
     toc = time.time()
     clear_terminal()
-    print(coords.shape)
-    print(round(1/(toc-tic)))
+    frames = round(1/(toc-tic))
+    x += frames
+    count += 1
+    print( round(x/count,2) )
+    print( frames)
+    timer('')
+
+
 
 print("<end of program>")

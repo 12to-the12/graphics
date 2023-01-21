@@ -34,12 +34,35 @@ class Object(Entity):
 
     def rotate(self,degrees,local=True,axis='Z'):
         axis = super().rotate(degrees,local=local,axis=axis)
-        timer('rotate')
         self.geometry = arbitrary_axis_rotation(self.geometry, axis, degrees)
     
     def origin_to_geometry(self):
         center = np.average(self.geometry,axis=0)
         self.geometry -= center
         self.origin = center
-        print(center)
+
+
+from numba import njit
+@njit  
+def build_blocks(text):
+    prefixes =          ['v ','vt','vn','f ']
+    start    = np.array([  0,   0,   0,  0])
+    length   = np.array([  0,   0,   0,  0])
+
+    text = text.split('\n')
+    prefix_index = 0
+    prefix = prefixes[prefix_index]
+    for line in text:
+        if line.startswith(prefix): length[prefix_index] += 1
+        if items[0] == 'v': print(items)
+
+
+
+def import_obj(filename):
+    with open(filename) as file:
+        text = file.read()
     
+    build_blocks(text)
+
+if __name__ == "__main__":
+    import_obj('teapot.obj')
