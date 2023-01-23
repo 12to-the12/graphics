@@ -3,16 +3,19 @@ from vector_math import arbitrary_axis_rotation
 from alert import alert
 import numpy as np
 
+alert('<compiling geometry_pipeline>')
+
 def project_in_camera_space(geometry, camera):
     """projects world coordinates in camera space, with the camera centered
     and facing towards -Z with the up vector towards +Y"""
+    assert len(geometry.shape) == 2, f"geometry is a list of vectors not shape {geometry.shape}"
     assert geometry.shape[1] == 3, "geometry is a list of vectors"
     # at this point in the pipeline all the geometry is defined relative to the world origin
     # now, we make it relative to the camera, both the coordinates and the rotation
 
     # step one is easy, subtract the camera position from every world coordinate
 
-    geometry = geometry-camera.position
+    geometry = geometry-camera.origin
 
     # the second step is more difficult
 
@@ -40,7 +43,7 @@ def project_in_screen_space(geometry, camera):
     xy /= w.reshape(-1,1)
     #alert(f"xy:{xy}")
     #alert([camera.focal_ratio, camera.focal_ratio * camera.aspect_ratio])
-    xy *= [camera.focal_ratio, camera.focal_ratio * camera.aspect_ratio] # half height
+    xy *= [camera.focal_ratio * 2, camera.focal_ratio * 2 * camera.aspect_ratio] # half height
     #alert(f"xy:{xy}")
     
     # cull close and far

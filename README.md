@@ -1,6 +1,6 @@
 # ray-tracing
 
-
+# abstract
 the implementation is going to be completely vectorized through every step of the process, for loops will be avoided like the plague
 
 
@@ -8,6 +8,13 @@ the implementation is going to be completely vectorized through every step of th
 local object cooordinates are transformed into world coordinates
 when loaded into the scene. note: track where they are in the
 world geometry array so they can be easily subbed out
+
+## learning materials
+[playlist](https://www.youtube.com/playlist?list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-)
+[ray plane intersection](https://www.youtube.com/watch?v=fIu_8b2n8ZM&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=3)
+[ray triangle intersection](https://www.youtube.com/watch?v=EZXz-uPyCyA&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=8)
+[projections](https://www.youtube.com/watch?v=VTV1GTrrtBQ&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=6)
+
 
 ## steps in the rendering pipeline:
 transform world geometry into camera-relative geometry where the camera

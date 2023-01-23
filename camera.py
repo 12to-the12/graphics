@@ -9,8 +9,9 @@ from entity import Entity
 
 class Camera(Entity):
     """a camera entity derived from the entity class"""
-    def __init__(self, aspect_ratio=2, focal_length=5, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
+    def __init__(self, aspect_ratio=1, focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
         """aspect ratio is width over height, ergo width if height was one"""
+        super().__init__()
         self.aspect_ratio = aspect_ratio
         self.focal_length = focal_length
         self.sensor_width = sensor_width
@@ -18,7 +19,7 @@ class Camera(Entity):
         self.far_cull     = far_cull
 
         self.fov = math.degrees(  2 * math.atan( sensor_width / ( 2 * focal_length )  )  )
-        self.focal_ratio = 2 * focal_length / sensor_width
+        self.focal_ratio = (focal_length / sensor_width) # * 2
 
     
     

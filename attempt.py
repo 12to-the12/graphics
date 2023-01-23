@@ -35291,7 +35291,6 @@ v  -0.3722 -15.0839 15.1684"""
 import numpy as np
 x = x.split('\n')
 a = np.zeros((len(x),3))
-print(a.shape)
 for index, item in enumerate(x):
     item = item[1:]
     x,y,z = item.split()

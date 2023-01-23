@@ -15,6 +15,8 @@ class Entity:
 
         self.scale_factor = 1
 
+        
+
         # these don't work, something to think about later
         #self.z_rotation = angle(ignore(self.view_vector,'z'),  Y)
         #self.y_rotation = angle(ignore(self.view_vector,'y'),  Y)
@@ -27,7 +29,7 @@ class Entity:
 
     def translate(self,change):
         assert change.shape == (3,), f"change should be an array with three elements, not {change.shape}"
-        self.position = self.position + change
+        self.origin = self.origin + change
     
     def scale(self,factor):
         """scales in every direction equally"""

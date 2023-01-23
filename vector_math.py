@@ -9,6 +9,8 @@ from alert import alert
 from timer import timer
 from numba import njit, float64
 
+alert('<compiling vector_math>')
+
 def orthogonal(a, b):
     """returns the normalize orthogonal to the inputted vectors"""
     a = np.round(a, 10)
@@ -101,6 +103,7 @@ def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
     if len(points.shape) == 1:
         points = points.reshape(1,-1)
         single_flag = True
+    assert len(points.shape) == 2, f"the arbitrary_axis_rotation function operates on a 2 dimensional list not {points.shape}"
     assert points.shape[1] == 3, "the arbitrary_axis_rotation function takes a LIST of vectors"
     assert rotation_axis.shape == (3,), "the rotation axis is not correctly shaped"
     rotation_axis = norm(rotation_axis)
