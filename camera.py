@@ -6,12 +6,17 @@ from clear_terminal import clear_terminal
 from alert import alert
 import math
 from entity import Entity
+import numpy as np
+
+Z      = np.array([ 0, 0, 1])
+n_Z    = np.array([ 0, 0,-1])
+Y      = np.array([ 0, 1, 0])
 
 class Camera(Entity):
     """a camera entity derived from the entity class"""
     def __init__(self, aspect_ratio=1, focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
         """aspect ratio is width over height, ergo width if height was one"""
-        super().__init__()
+        super().__init__(view_vector=n_Z, up_vector=Y)
         self.aspect_ratio = aspect_ratio
         self.focal_length = focal_length
         self.sensor_width = sensor_width

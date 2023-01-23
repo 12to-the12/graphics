@@ -4,7 +4,7 @@ import pygame
 from mesh import Mesh
 from geometry_pipeline import *
 from object import Object
-from draw_points import draw_points
+from draw import draw_points, draw_polygons
 from timer import timer
 print('<bottom of render>')
 def render( screen=None, scene=None ):
@@ -18,7 +18,7 @@ def render( screen=None, scene=None ):
 
     #canvas = pygame.Surface.copy(canvas)
 
-    h_res, v_res = 100,100#1920/1.25,1000/1.25
+    h_res, v_res = 500,500#1920/1.25,1000/1.25
     canvas = pygame.Surface((h_res, v_res))
 
     # this line calls ray_cast on the given scene information
@@ -26,10 +26,11 @@ def render( screen=None, scene=None ):
     #image = pygame.surfarray.make_surface( pixel_array )
 
     
-    
-    out =  ray_cast(canvas=canvas,scene=scene)
-    out = pygame.transform.scale( out, [200,200])
-    print(out)
+    #out = draw_points(canvas=canvas, scene=scene)
+    out = draw_polygons(canvas=canvas, scene=scene)
+    #out =  ray_cast(canvas=canvas,scene=scene)
+    out = pygame.transform.smoothscale( out, screen.get_size()  ) # transforms the outputted surface to fit the display size
+
     timer('drawing')
     return out
     

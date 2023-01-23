@@ -8,8 +8,8 @@ alert('<compiling geometry_pipeline>')
 def project_in_camera_space(geometry, camera):
     """projects world coordinates in camera space, with the camera centered
     and facing towards -Z with the up vector towards +Y"""
-    assert len(geometry.shape) == 2, f"geometry is a list of vectors not shape {geometry.shape}"
-    assert geometry.shape[1] == 3, "geometry is a list of vectors"
+    assert len(geometry.shape) == 2, f"geometry should be  a LIST of vertexes not shape {geometry.shape}"
+    assert geometry.shape[1] == 3, "geometry should be a list of vertexes"
     # at this point in the pipeline all the geometry is defined relative to the world origin
     # now, we make it relative to the camera, both the coordinates and the rotation
 

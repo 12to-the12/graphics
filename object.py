@@ -25,7 +25,6 @@ class Object(Entity):
         # following subject to transformations
         self.geometry = self.source_geometry
 
-        print(f'geometry: {self.geometry}')
 
     def get_objects():
         return Object.list 

@@ -4,11 +4,12 @@ from ignore import ignore
 def arr(x): return np.array(x)
 
 world_origin = arr([ 0, 0, 0])
+Z      = arr([ 0, 0, 1])
 n_Z    = arr([ 0, 0,-1])
 Y      = arr([ 0, 1, 0])
 
 class Entity:
-    def __init__(self, origin=world_origin,view_vector=n_Z,up_vector=Y):
+    def __init__(self, origin=world_origin,view_vector=Y,up_vector=Z):
         self.origin = world_origin
         self.view_vector = view_vector
         self.up_vector = up_vector
@@ -40,21 +41,21 @@ class Entity:
         self.view_vector = arbitrary_axis_rotation(self.view_vector, axis, degrees)
         self.up_vector   = arbitrary_axis_rotation(self.up_vector,   axis, degrees)
 
-    def rotate(self,degrees,local=True,axis='Z'):
+    def rotate(self,degrees,local=False,axis='z'):
         """the user accessed rotate command
         for the local rotations the view_vector acts as the Y axis, the up_vector acts as
         the Z, and the orthogonal between them acts as the X"""
         if local:
-            if axis is  'X': axis = np.cross(self.view_vector,self.up_vector)
-            if axis is  'Y': axis = self.view_vector
-            if axis is  'Z': axis = self.up_vector
+            if axis ==  'x': axis = np.cross(self.view_vector,self.up_vector)
+            if axis ==  'y': axis = self.view_vector
+            if axis ==  'z': axis = self.up_vector
         if not local:
             X = np.array([ 1, 0, 0])
             Y = np.array([ 0, 1, 0])
             Z = np.array([ 0, 0, 1])
-            if axis is 'X': axis = X
-            if axis is 'Y': axis = Y
-            if axis is 'Z': axis = Z
+            if axis == 'x': axis = X
+            if axis == 'y': axis = Y
+            if axis == 'z': axis = Z
         self.rot_axis(axis, degrees)
         return axis
 

@@ -25,7 +25,7 @@ camera.up_vector   = np.array(( 0,  0, 1))
 alert('<initializing pygame>')
 import pygame
 pygame.init()
-h_res, v_res = 200,200#1920/1.25,1000/1.25
+h_res, v_res = 500,500#1920/1.25,1000/1.25
 screen = pygame.display.set_mode((h_res, v_res))
 
 clock = pygame.time.Clock()
@@ -44,6 +44,9 @@ print('<importing model>')
 #teapot = OBJ('models/teapot')
 triangle = OBJ('models/triangle')
 triangle.name = 'triangle'
+
+cube = OBJ('models/cube')
+cube.name = cube
 print('<importing Mesh>')
 from mesh import Mesh
 print('<importing render>')
@@ -58,7 +61,7 @@ from scene import Scene
 # priaga
 
 scene = Scene(camera=camera)
-scene.add_object( triangle )
+scene.add_object( cube )
 
 
 
@@ -80,22 +83,23 @@ while True:
     #teapot.rotate(4.5, axis='Z',local=False)
     #teapot.rotate(1, axis='X',local=True)
     #timer('rotating')
-    #cat.rotate(1, axis='Z',local=True)
+    cube.rotate(1, axis='z',local=True)
     #timer('rotating')
     alert('<rendering>')
     image = render(screen=screen, scene=scene)
     alert('<blitting>')
     screen.blit(image, (0,0) )
-    camera.translate(np.array([0,-0.1,0]))
+    #camera.translate(np.array([0,-0.1,0]))
     pygame.display.flip()  # Refresh on-screen display
-    #clock.tick(1)         # wait until next frame (at 60 FPS)
+    clock.tick(10)         # wait until next frame (at 60 FPS)
     toc = time.time()
     clear_terminal()
-    frames = round(1/(toc-tic))
+    frames = round(1/(toc-tic),2)
     x += frames
     count += 1
-    print( round(x/count,2) )
-    print( frames)
+    print(f'fps:\t{frames}')
+    print(f'avg fps:\t{round(x/count,2)}')
+    
     timer('')
     #quit()
 

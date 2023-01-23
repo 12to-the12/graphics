@@ -14,10 +14,21 @@ class Mesh:
         self.geometry = np.empty([polygon_count, 3, 3])
 
         for index, object in enumerate(objects):
-            alert(f'generating mesh for {object.name}')
-            alert(f'self.geometry {self.geometry.shape}')
-            alert(f'index {index}')
-            alert(f'length {object.geometry.shape[0]}')
+            #alert(f'generating mesh for {object.name}')
+            #alert(f'self.geometry {self.geometry.shape}')
+            #alert(f'index {index}')
+            #alert(f'length {object.geometry.shape[0]}')
             self.geometry[index:index+object.geometry.shape[0]] = object.geometry
-        print(f'the mesh generated is of the shape {self.geometry.shape}')
+    
+    def build_vertex_list(self, objects):
+        """generates a list of all vertexes in a scene. Because I want draw_points to work"""
+        vertex_count = 0
+        for object in objects:
+            vertex_count += object.v.shape[0]
+        self.v = np.empty([vertex_count, 3])
+
+        for index, object in enumerate(objects):
+            self.v[index:index+object.v.shape[0]] = object.v
+
+
     
