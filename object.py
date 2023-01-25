@@ -3,6 +3,7 @@ from vector_math import arbitrary_axis_rotation
 import numpy as np
 from timer import timer
 from numba import prange
+import typing
 
 class Object(Entity):
     """a physical object that exists in a scene to be rendered
@@ -10,7 +11,7 @@ class Object(Entity):
     material object too, maybe per face"""
     count = 0
     list =  []
-    def __init__(self, geometry=None, name=None):
+    def __init__(self, geometry, name=None):
         # bounding box, source geometry, translated, shader, textures
         super().__init__()
         self.index = Object.count
@@ -19,6 +20,8 @@ class Object(Entity):
         if name: self.name=name
         else: self.name = self.index
         Object.list.append(self)
+
+        
 
         
         self.source_geometry = geometry
@@ -41,13 +44,24 @@ class Object(Entity):
         self.geometry *= factor
 
     def rotate(self,degrees,local=True,axis='Z'):
+        
         axis = super().rotate(degrees,local=local,axis=axis)
         self.geometry = arbitrary_axis_rotation(self.geometry.reshape(-1,3), axis, degrees).reshape(-1,3,3)
+        
     
     def origin_to_geometry(self):
-        center = np.average(self.geometry,axis=0)
-        self.geometry -= (center-self.origin)
+        center = np.average(self.geometry.reshape(-1,3),axis=0)
+        shift = center-self.origin
+
+        #print('center', center)
+        #print('shift', shift)
+        #print('origin', self.origin)
+
+
         self.origin = center
+        
+        self.geometry = self.geometry - shift
+        
 
 
 from numba import njit
@@ -90,12 +104,11 @@ def parse_obj(text):
     vn_index = 0
     v      = np.zeros((occurences[3],3))
     v_index = 0
-    if slashes:
-        f_3d       = np.empty((occurences[4],3,3))
-        f_index = 0
-    else:
-        f       = np.empty((occurences[4],3))
-        f_index = 0
+
+
+    f_3d       = np.empty((occurences[4],3,3))
+    f       = np.empty((occurences[4],3))
+    f_index = 0
 
     for line in text:
         if line.startswith('#'): continue

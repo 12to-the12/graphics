@@ -17,8 +17,9 @@ def render( screen=None, scene=None ):
     assert scene,  'no scene ascribed for render function'
 
     #canvas = pygame.Surface.copy(canvas)
+    scaling = 1
+    h_res, v_res = np.array(screen.get_size() ) * scaling # 2000,1000 #1920/1.25,1000/1.25
 
-    h_res, v_res = 500,500#1920/1.25,1000/1.25
     canvas = pygame.Surface((h_res, v_res))
 
     # this line calls ray_cast on the given scene information
@@ -27,11 +28,10 @@ def render( screen=None, scene=None ):
 
     
     #out = draw_points(canvas=canvas, scene=scene)
-    out = draw_polygons(canvas=canvas, scene=scene)
+    out = draw_polygons(canvas=canvas, scene=scene, wireframe=True)
     #out =  ray_cast(canvas=canvas,scene=scene)
     out = pygame.transform.smoothscale( out, screen.get_size()  ) # transforms the outputted surface to fit the display size
 
-    timer('drawing')
     return out
     
      

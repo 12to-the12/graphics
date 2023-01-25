@@ -1,12 +1,12 @@
 import numpy as np
-from vector_math import arbitrary_axis_rotation, orthogonal, angle
+from vector_math import single__axis_rotation, orthogonal, angle
 from ignore import ignore
 def arr(x): return np.array(x)
 
-world_origin = arr([ 0, 0, 0])
-Z      = arr([ 0, 0, 1])
-n_Z    = arr([ 0, 0,-1])
-Y      = arr([ 0, 1, 0])
+world_origin = arr([ 0., 0., 0.])
+Z      = arr([ 0., 0., 1.])
+n_Z    = arr([ 0., 0.,-1.])
+Y      = arr([ 0., 1., 0.])
 
 class Entity:
     def __init__(self, origin=world_origin,view_vector=Y,up_vector=Z):
@@ -38,8 +38,8 @@ class Entity:
     
     def rot_axis(self,axis,degrees):
         """rotates the entity around the given axis"""
-        self.view_vector = arbitrary_axis_rotation(self.view_vector, axis, degrees)
-        self.up_vector   = arbitrary_axis_rotation(self.up_vector,   axis, degrees)
+        self.view_vector = single__axis_rotation(self.view_vector, axis, degrees)
+        self.up_vector   = single__axis_rotation(self.up_vector,   axis, degrees)
 
     def rotate(self,degrees,local=False,axis='z'):
         """the user accessed rotate command
@@ -50,9 +50,9 @@ class Entity:
             if axis ==  'y': axis = self.view_vector
             if axis ==  'z': axis = self.up_vector
         if not local:
-            X = np.array([ 1, 0, 0])
-            Y = np.array([ 0, 1, 0])
-            Z = np.array([ 0, 0, 1])
+            X = np.array([ 1., 0., 0.])
+            Y = np.array([ 0., 1., 0.])
+            Z = np.array([ 0., 0., 1.])
             if axis == 'x': axis = X
             if axis == 'y': axis = Y
             if axis == 'z': axis = Z
@@ -65,12 +65,12 @@ class Entity:
     def rotate_pitch(self,degrees):
         """ y and z, x is the vector nodding, upwards nod is positive"""
         cross = np.cross(self.view_vector,self.up_vector)
-        self.up_vector   = arbitrary_axis_rotation(self.up_vector, cross, degrees)
-        self.view_vector = arbitrary_axis_rotation(self.view_vector, cross, degrees)
+        self.up_vector   = single__axis_rotation(self.up_vector, cross, degrees)
+        self.view_vector = single__axis_rotation(self.view_vector, cross, degrees)
         
     def rotate_yaw(self,degrees):
         """ x and y, z is the vector shaking head, left rotation is positive"""
-        self.view_vector = arbitrary_axis_rotation(self.view_vector, self.up_vector, degrees)
+        self.view_vector = single__axis_rotation(self.view_vector, self.up_vector, degrees)
     def rotate_roll(self,degrees):
         """ x and z, y is the vector side to side, indian head nod, rolling right is positive"""
-        self.up_vector = arbitrary_axis_rotation(self.up_vector, self.view_vector, degrees)
+        self.up_vector = single__axis_rotation(self.up_vector, self.view_vector, degrees)

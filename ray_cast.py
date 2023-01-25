@@ -1,29 +1,25 @@
-from numba import njit, float64, boolean, guvectorize
+from alert import alert
+alert('<top of ray_cast>')
+
+from numba import njit, float64, boolean, guvectorize, prange
 import numba
 import numpy as np
-from vector_math import normalize, norm
+from vector_math import normalize, norm, normal_of_polygon
 from geometry_pipeline import project_in_camera_space
 from mesh import Mesh
 import pygame
 from alert import alert
+from timer import timer
 
 alert('<compiling ray_cast>')
 
-@njit(float64(float64[:],float64[:]))
+@njit(float64(float64[:],float64[:]), cache=True)
 def dot(a, b):
     return np.sum(a * b)
 
-@njit(float64[:](float64[:,:]))
-def normal_of_polygon(points):
-    """this function finds the normal of a polygon, assuming the points are wound counter clockwise"""
-    a, b, c = points
-    vector_a = b-a
-    vector_b = c-a
-    normal = np.cross(vector_a, vector_b)
-    normal = norm(normal)
-    return normal
 
-#@numba.guvectorize([float64[:](float64[:], float64[:,:])])
+
+@njit(float64[:](float64[:], float64[:,:]), cache=True)
 def ray_plane_intersection(ray, points):
     ray_origin=np.array([0,0,0])
     N = normal_of_polygon(points)
@@ -31,10 +27,10 @@ def ray_plane_intersection(ray, points):
     #print(f'ray:{ray}')
     #print(dot(ray, N) )
     if dot(ray, N) > 0:
-        print('the plane normal is facing away from the ray')
+        #print('the plane normal is facing away from the ray')
         return np.array([0.,0.,0.])
     if abs( dot(ray, N) ) <= 1e-4:
-        print('the plane normal and ray are at right angles, no intersection is possible')
+        #print('the plane normal and ray are at right angles, no intersection is possible')
         return np.array([0.,0.,0.])
     C = points[0] # any point that lies on the shared plane
     V = ray
@@ -51,28 +47,26 @@ def ray_plane_intersection(ray, points):
     #print ('distance:',k)
     return I # returns the intersection point
 
-@njit(float64[:](float64[:],float64[:]))
+@njit(float64[:](float64[:],float64[:]), cache=True)
 def project_vector(a, b): # projects b onto a
     return ( dot(a, b) / dot(a, a) ) * a
 
 
-#@njit(boolean(float64[:], float64[:,:]))
+#@guvectorize([float64[:], float64[:,:],boolean[:]], '(n),(n,n)->(n)', nopython=True)
+@njit([boolean(float64[:], float64[:,:])], cache=True)
 def ray_triangle_intersection(ray,points):
-    
+    ''' this function determines intersection and returns the barycentric 
+    coordinates of the intersection point if there is a hit'''
     #print(f'ray:{ray}')
     #print(f'points:{points}')
     #print()
-    # this function determines intersection and returns the barycentric
-    # coordinates of the intersection point if there is a hit
     I = ray_plane_intersection(ray,points) # the point of intersection
     #print(f'I:{I}')
     if np.all(I == 0): return False
-
     A, B, C = points
     
     AB = B - A
     CB = B - C
-    
     v = AB - project_vector( CB, AB )
 
     
@@ -93,7 +87,6 @@ def ray_triangle_intersection(ray,points):
     b = 1 - ( dot( v, BI ) / dot( v, BC ) )
     #print(f'b:{b}')
     
-    
     CA = A - C # motherline
     BA = A - B
     v = CA - project_vector( BA, CA ) # finding the CB instead of the CA at the star of the expression took an hour
@@ -103,20 +96,22 @@ def ray_triangle_intersection(ray,points):
     #print('v',v)
     c = 1 - ( dot( v, CI ) / dot( v, CA ) )
     #print(f'c:{c}')
-
-    
     
     barycentric_coordinates = np.array([a, b, c])
     #print(f'barycentric_coordinates:\n{barycentric_coordinates}')
     #print('\n')
-
-
     if np.any(barycentric_coordinates < 0): return False
     if np.any(barycentric_coordinates > 1): return False
     return True
 
 
-
+@njit(boolean[:](float64[:,:],float64[:,:,:], boolean[:]), cache=True)
+def intersection_loop(rays, geometry, mask):
+    for index in prange(rays.shape[0]):
+        for triangle in geometry:
+            if ray_triangle_intersection(rays[index], triangle): mask[index] = True
+    
+    return mask
 
 
 
@@ -147,10 +142,10 @@ def generate_rays(x_res, y_res, z, random=False, norm=True):
     out =  np.hstack([table,np.full([x_res*y_res,1],-z)])
 
     #print(f'out: {out}')
-    print(out.shape)
     #print(out.dtype)
     if norm: out = normalize(out)
     return out
+
 
     
 
@@ -177,6 +172,9 @@ def ray_cast(canvas=None, scene=None,samples=10,reflection_budget=0,refraction_b
 
     """
 
+    assert canvas, 'no canvas passed for ray_cast'
+    assert scene, 'no scene passed for ray_cast'
+    
     camera = scene.camera
     objects = scene.objects
     lights = scene.lights
@@ -186,11 +184,11 @@ def ray_cast(canvas=None, scene=None,samples=10,reflection_budget=0,refraction_b
     v_res = canvas.get_height()
     # 2 and 2 focal ratio 1
     # multiply the two
-    print(f'h_res {h_res}')
-    print(f'v_res {v_res}')
-    print(f'camera.focal_ratio {camera.focal_ratio}')
+    #print(f'h_res {h_res}')
+    #print(f'v_res {v_res}')
+    #print(f'camera.focal_ratio {camera.focal_ratio}')
     rays = generate_rays(h_res, v_res, camera.focal_ratio * h_res, norm=True)
-    print(f'generated rays [4] : {rays[4]}')
+    #print(f'generated rays [4] : {rays[4]}')
     rays = rays.reshape(-1,3)
     
 
@@ -199,15 +197,20 @@ def ray_cast(canvas=None, scene=None,samples=10,reflection_budget=0,refraction_b
     
     geometry = project_in_camera_space(mesh.geometry.reshape(-1,3), camera).reshape(-1,3,3)
     #geometry *= np.array([1,1,-1]) # don't use, thought it was necessary, it's not
-    print(f'projected geometry:{geometry}')
-    print(rays.shape)
-    print(f'rays [4] :{rays[4]}')
+    #print(f'projected geometry:{geometry}')
+    #print(rays.shape)
+    #print(f'rays [4] :{rays[4]}')
     mask = np.full([rays.shape[0]  ],False)
-    alert('<casting rays>')
-    for index in range(rays.shape[0]):
-        for triangle in geometry:
-            if ray_triangle_intersection(rays[index], triangle): mask[index] = True
-    alert('<done>')
+    #alert('<casting rays>')
+    timer('projection')
+    print(f'rays:\t{rays.shape}')
+    print(f'geometry:\t{geometry.shape}')
+    print(f'mask:\t{mask.shape}')
+
+    mask = intersection_loop(rays, geometry, mask)
+    
+    timer('intersection')
+    #alert('<done>')
     #print('mask', mask)
     mask = np.repeat(mask, 3)
     pixels = np.full([h_res * v_res, 3], 0, dtype='uint32')
@@ -223,7 +226,6 @@ def ray_cast(canvas=None, scene=None,samples=10,reflection_budget=0,refraction_b
     
     pygame.surfarray.blit_array(canvas, pixels)
 
-    print(canvas)
 
     return canvas
 
@@ -245,4 +247,6 @@ if __name__ == "__main__":
     ray = np.array(ray)
     polygon = np.array(polygon)
     print()
+    timer('init')
     print(  ray_triangle_intersection(ray, polygon)  )
+    timer('inter')

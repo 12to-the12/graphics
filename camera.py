@@ -1,6 +1,6 @@
 
 import numpy as np
-from vector_math import arbitrary_axis_rotation, normalize
+from vector_math import single__axis_rotation, arbitrary_axis_rotation, normalize
 from vector_math import orthogonal, angle
 from clear_terminal import clear_terminal
 from alert import alert
@@ -8,13 +8,13 @@ import math
 from entity import Entity
 import numpy as np
 
-Z      = np.array([ 0, 0, 1])
-n_Z    = np.array([ 0, 0,-1])
-Y      = np.array([ 0, 1, 0])
+Z      = np.array([ 0., 0., 1.])
+n_Z    = np.array([ 0., 0.,-1.])
+Y      = np.array([ 0., 1., 0.])
 
 class Camera(Entity):
     """a camera entity derived from the entity class"""
-    def __init__(self, aspect_ratio=1, focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
+    def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
         """aspect ratio is width over height, ergo width if height was one"""
         super().__init__(view_vector=n_Z, up_vector=Y)
         self.aspect_ratio = aspect_ratio
@@ -46,12 +46,13 @@ class Camera(Entity):
         angle_a = angle(self.view_vector,n_Z)
 
         if angle_a == 180:
-            intermediary_up   = arbitrary_axis_rotation(self.up_vector,  X,180)
+            intermediary_up   = single__axis_rotation(self.up_vector,  X,180)
+            axis_a = None
         elif angle_a: # only necessary if angle_a is non zero
             axis_a = orthogonal(self.view_vector,n_Z) # computed axis of rotation
             # intermediary is the result of applying the operation that aligns the
             # view vector with -Z to the up vector
-            intermediary_up   = arbitrary_axis_rotation(self.up_vector,  axis_a,angle_a)
+            intermediary_up   = single__axis_rotation(self.up_vector,  axis_a, angle_a)
         else:
             intermediary_up = self.up_vector
             axis_a = n_Z 
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     np.set_printoptions(suppress=True) # suppresses scientific notation
     clear_terminal()
     camera = Camera()
-    camera.position    = np.array(( 0,-1, 0)) # x,y,z
+    camera.origin    = np.array(( 0,-1, 0)) # x,y,z
     camera.view_vector = np.array(( 0, 1, 0))
     camera.up_vector   = np.array(( 0, 0, 1))
 

@@ -1,6 +1,6 @@
 # ray-tracing
 
-# abstract
+## abstract
 the implementation is going to be completely vectorized through every step of the process, for loops will be avoided like the plague
 
 
@@ -9,6 +9,8 @@ local object cooordinates are transformed into world coordinates
 when loaded into the scene. note: track where they are in the
 world geometry array so they can be easily subbed out
 
+## to do
+geometry culling does not work for culling entire polygons, it needs to be able to receive structured lists to do that effectively
 ## learning materials
 [playlist](https://www.youtube.com/playlist?list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-)
 [ray plane intersection](https://www.youtube.com/watch?v=fIu_8b2n8ZM&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=3)
