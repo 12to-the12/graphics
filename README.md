@@ -16,7 +16,7 @@ geometry culling does not work for culling entire polygons, it needs to be able 
 [ray plane intersection](https://www.youtube.com/watch?v=fIu_8b2n8ZM&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=3)
 [ray triangle intersection](https://www.youtube.com/watch?v=EZXz-uPyCyA&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=8)
 [projections](https://www.youtube.com/watch?v=VTV1GTrrtBQ&list=PLW3Zl3wyJwWN6V7IEb2BojFYOlgpryp1-&index=6)
-
+[efficient triangle rasterization](https://www.youtube.com/watch?v=PahbNFypubE)
 
 ## steps in the rendering pipeline:
 transform world geometry into camera-relative geometry where the camera
