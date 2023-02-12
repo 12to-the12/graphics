@@ -53,3 +53,8 @@ tan of theta = opposite/adjacent
 4. projection space: 2d points
 4. clip space: 2d points where anything over |1| is out
 5. screen space: coordinates that correspond to a position on the screen
+
+##
+remember:
+ - python pip install numpy  for 3.10.9
+ - py pip install numpy      for 3.11.1
