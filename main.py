@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.10.9
+
 from clear_terminal import clear_terminal
 clear_terminal()
 
