@@ -19,6 +19,17 @@ geometry culling does not work for culling entire polygons, it needs to be able 
 [efficient triangle rasterization](https://www.youtube.com/watch?v=PahbNFypubE)
 
 ## steps in the rendering pipeline:
+1. Application
+    1. User Input
+    2. Animation
+2. Geometry
+    1. model & camera transformation
+    2. lighting
+    3. projection
+    4. clipping
+    5. window->viewport transformation
+3. Rasterization
+
 transform world geometry into camera-relative geometry where the camera
 faces into positive z for easy math
 

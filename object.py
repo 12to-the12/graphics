@@ -2,10 +2,10 @@ from entity import Entity
 from vector_math import arbitrary_axis_rotation
 import numpy as np
 from timer import timer
-from numba import prange
+from numba import prange, njit
 import typing
-
-class Object(Entity):
+from analysis import analyze
+class Scene_Object(Entity):
     """a physical object that exists in a scene to be rendered
     info about vertices, faces, textures coordinates, and normals
     material object too, maybe per face"""
@@ -14,12 +14,12 @@ class Object(Entity):
     def __init__(self, geometry, name=None):
         # bounding box, source geometry, translated, shader, textures
         super().__init__()
-        self.index = Object.count
-        Object.count += 1
+        self.index = Scene_Object.count
+        Scene_Object.count += 1
 
         if name: self.name=name
         else: self.name = self.index
-        Object.list.append(self)
+        Scene_Object.list.append(self)
 
         
 
@@ -30,7 +30,7 @@ class Object(Entity):
 
 
     def get_objects():
-        return Object.list 
+        return Scene_Object.list 
 
     def translate(self,change):
 
@@ -43,6 +43,7 @@ class Object(Entity):
         super().scale(factor)
         self.geometry *= factor
 
+    @analyze
     def rotate(self,degrees,local=True,axis='Z'):
         
         axis = super().rotate(degrees,local=local,axis=axis)
@@ -50,6 +51,7 @@ class Object(Entity):
         
     
     def origin_to_geometry(self):
+        # the resulting global values should be unchanged
         center = np.average(self.geometry.reshape(-1,3),axis=0)
         shift = center-self.origin
 
@@ -61,10 +63,19 @@ class Object(Entity):
         self.origin = center
         
         self.geometry = self.geometry - shift
+
+    def geometry_to_origin(self):
+        center = np.average(self.geometry.reshape(-1,3),axis=0)
+        shift = center-self.origin
+
+
+        # self.origin = center
+        
+        self.geometry = self.geometry - shift
         
 
 
-from numba import njit
+
 #@njit
 def parse_obj(text):
     """this function parses a subset of features supported by obj files
@@ -173,7 +184,7 @@ def build_geometry(v, f):
     return out
 
 
-class OBJ(Object):
+class OBJ(Scene_Object):
     def __init__(self,filepath):
         self.v, self.vt, self.vn, self.f = import_obj(filepath+'.obj')
         geometry =  build_geometry(self.v, self.f)

@@ -8,7 +8,6 @@ from vector_math import normalize, norm, normal_of_polygon
 from geometry_pipeline import project_in_camera_space
 from mesh import Mesh
 import pygame
-from alert import alert
 from timer import timer
 
 alert('<compiling ray_cast>')

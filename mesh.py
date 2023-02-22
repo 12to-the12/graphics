@@ -1,5 +1,4 @@
 import numpy as np
-from alert import alert
 
 class Mesh:
     """a mesh to be rendered"""

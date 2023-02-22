@@ -1,13 +1,18 @@
 import numpy as np
 from vector_math import single__axis_rotation, orthogonal, angle
-from ignore import ignore
+from timer import t
+from tree import tree
+from analysis import analyze
+import time
+
 def arr(x): return np.array(x)
 
 world_origin = arr([ 0., 0., 0.])
-Z      = arr([ 0., 0., 1.])
-n_Z    = arr([ 0., 0.,-1.])
-Y      = arr([ 0., 1., 0.])
+n_Z    = np.array([ 0., 0.,-1.])
 
+X = np.array([ 1., 0., 0.])
+Y = np.array([ 0., 1., 0.])
+Z = np.array([ 0., 0., 1.])
 class Entity:
     def __init__(self, origin=world_origin,view_vector=Y,up_vector=Z):
         self.origin = world_origin
@@ -29,6 +34,7 @@ class Entity:
         return f"view_vector: {self.view_vector}"
 
     def translate(self,change):
+        if type(change) is list: change = np.array(change)
         assert change.shape == (3,), f"change should be an array with three elements, not {change.shape}"
         self.origin = self.origin + change
     
@@ -41,22 +47,34 @@ class Entity:
         self.view_vector = single__axis_rotation(self.view_vector, axis, degrees)
         self.up_vector   = single__axis_rotation(self.up_vector,   axis, degrees)
 
+    # @analyze
     def rotate(self,degrees,local=False,axis='z'):
         """the user accessed rotate command
         for the local rotations the view_vector acts as the Y axis, the up_vector acts as
         the Z, and the orthogonal between them acts as the X"""
+        axis_letter = axis
+        
         if local:
-            if axis ==  'x': axis = np.cross(self.view_vector,self.up_vector)
-            if axis ==  'y': axis = self.view_vector
-            if axis ==  'z': axis = self.up_vector
-        if not local:
-            X = np.array([ 1., 0., 0.])
-            Y = np.array([ 0., 1., 0.])
-            Z = np.array([ 0., 0., 1.])
-            if axis == 'x': axis = X
-            if axis == 'y': axis = Y
-            if axis == 'z': axis = Z
+            if axis_letter ==  'x': axis = np.cross(self.view_vector,self.up_vector)
+            elif axis_letter ==  'y': axis = self.view_vector
+            elif axis_letter ==  'z': axis = self.up_vector
+            else: raise Exception('axis_letter must be xyz')
+        else:
+            
+            if axis_letter == 'x': axis = X
+            elif axis_letter == 'y': axis = Y
+            elif axis_letter == 'z':
+                axis = Z
+            else: raise Exception(f'axis_letter must be xyz, not {axis_letter}')
+        
+
+        
+
+
+
         self.rot_axis(axis, degrees)
+
+
         return axis
 
     # these rotations operate in camera space

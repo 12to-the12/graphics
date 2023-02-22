@@ -4,7 +4,7 @@ alert('<top of vector_math>')
 import numpy as np
 from clear_terminal import clear_terminal
 
-from timer import timer
+from analysis import analyze
 from numba import njit, float64, f8, i4, prange, boolean
 
 alert('<compiling vector_math>')
@@ -174,6 +174,9 @@ def quaternion(vectors,x, transpose=False):
     return out # scalar, i ,j ,k
 
 alert('<compiling arbitrary_axis_rotation>')
+
+
+
 @njit([ f8[:,:](f8[:,:],f8[:],f8)], cache=True)
 def arbitrary_axis_rotation(points,rotation_axis,degrees): # vector_array
     """currently, THE function it currently operate at around one million operations for

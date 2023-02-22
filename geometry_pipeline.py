@@ -1,12 +1,16 @@
 
 from vector_math import arbitrary_axis_rotation, normal_of_polygons
 from alert import alert
+from analysis import analyze
 import numpy as np
 from numpy import linalg
 import numpy.typing as npt
 from camera import Camera
+from timer import t
+from tree import tree
 alert('<compiling geometry_pipeline>')
 
+@analyze
 def normal_cull(geometry : np.ndarray, camera : Camera) -> np.ndarray:
     """
     receives (-1, 3, 3)
@@ -26,15 +30,13 @@ def normal_cull(geometry : np.ndarray, camera : Camera) -> np.ndarray:
     dot_products = linalg.multi_dot([normals, camera.view_vector])
     assert dot_products.ndim == 1, f'dot_products should be shaped (-1,) not {dot_products.shape}'
     pass_table = (dot_products < 0)
-    #print(type(pass_table))
-    #print('pass_table', pass_table.shape)
-    #print(geometry.shape)
+
     filtered_geometry = geometry[pass_table]
     assert filtered_geometry.dtype == 'float64', f'{filtered_geometry.dtype}'
     return filtered_geometry
 
     
-
+@analyze
 def project_in_camera_space(geometry : np.ndarray, camera : Camera) -> np.ndarray:
     assert geometry.dtype == 'float64', f'{geometry.dtype}'
     """
@@ -72,6 +74,7 @@ def project_in_camera_space(geometry : np.ndarray, camera : Camera) -> np.ndarra
     assert geometry.ndim == 2, f'geometry shaped bad as {geometry.shape}'
     return geometry
 
+@analyze
 def z_sort(geometry: np.ndarray) -> np.ndarray:
     """
     receives (-1,3,3)
@@ -94,6 +97,7 @@ def z_sort(geometry: np.ndarray) -> np.ndarray:
     
     return sorted_geometry
 
+@analyze
 def project_in_screen_space(geometry : np.ndarray, camera : Camera) -> np.ndarray:
     """
     receives (-1, 3)
@@ -121,6 +125,7 @@ def project_in_screen_space(geometry : np.ndarray, camera : Camera) -> np.ndarra
     assert xyw.ndim == 2, f"xyw needs to be (-1,3) not {xyw.shape}"
     return xyw
 
+@analyze
 def frustrum_cull(xyw, camera : Camera):
     """
     receives xyw (-1, 3)
@@ -158,7 +163,7 @@ def frustrum_cull(xyw, camera : Camera):
     return xy
 
 
-
+@analyze
 def project_screen_coordinates(coordinates : np.ndarray, screen) -> np.ndarray:
     """
     receives coordinates (-1,2)
@@ -178,24 +183,4 @@ def project_screen_coordinates(coordinates : np.ndarray, screen) -> np.ndarray:
     return coordinates
     
 if __name__ == "__main__":
-    alert('<initializing camera>')
-    from camera import Camera
-    camera = Camera()
-    camera.origin    = np.array(( 0, 0, 0)) # x,y,z
-    camera.view_vector = np.array(( 0, 1, 0))
-    camera.up_vector   = np.array(( 0, 0, 1))
-
-    alert('<rotating camera>')
-    camera.rotate_yaw(0) # left
-    camera.rotate_pitch(0) # up
-    camera.rotate_roll(0) #
-
-    alert('<initializing geometry>')
-    geometry = np.array([[-2,2,1],[-4,2,0],[2,2,0]])
-
-    alert('<projecting geometry>')
-
-    geometry = project_in_camera_space(geometry, camera)
-    geometry = project_in_screen_space(geometry, camera)
-
-    
+    pass

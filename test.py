@@ -1,9 +1,9 @@
-import numpy as np
 
-x = [0,1,0]
-y = [0,-1,0]
-
-x = np.array(x)
-y = np.array(y)
-
-print( np.dot(x,y) )
+import time
+import random
+rep = 10_000
+a = time.time()
+for x in range(rep):
+    print('hello!\nmy name is Donald Glover, what is your perspective on love')
+b = time.time()
+print(((b-a)*1000)/rep, 'ms')
