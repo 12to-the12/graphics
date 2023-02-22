@@ -114,6 +114,6 @@ def timer(message):
 @t
 def dump():
     global buffer
-    clear_terminal()
-    print(buffer)
+    # clear_terminal()
+    # print(buffer)
     buffer = ''

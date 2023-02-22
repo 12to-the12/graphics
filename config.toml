@@ -14,7 +14,7 @@ mermaid = true # generates a mermaid diagram out of the function flow
 h_res = 1500 # actual endpoint size
 v_res = 750
 smoothscale = true
-scaling = 4 # horizontal pixels that go into making a single pixel
+scaling = 1 # horizontal pixels that go into making a single pixel
 
 [camera]
 focal_length=20
@@ -25,7 +25,7 @@ far_cull=1000
 [scene]
 
 [raster]
-occlusion = true
+occlusion = false
 weight = 1
 individual = false # draws individually
 # NOTICE; stalls frame if you try to smoothscale

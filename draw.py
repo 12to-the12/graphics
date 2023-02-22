@@ -56,7 +56,7 @@ def loop(coords=None, canvas=None, width=None):
     assert not width is None, 'no width specified'
 
     screen = pygame.display.get_surface()
-
+    
     for coord in coords:
         if occlusion:
             pygame.draw.polygon(canvas, face_color, coord, 0)
@@ -87,6 +87,11 @@ def draw_polygons(canvas=None, scene=None, individual=False):
     canvas.fill( background ) # Fill the display with a solid color
     mesh = Mesh()
     mesh.build(scene.objects)
+    # print(mesh.geometry.shape)
+    # print(mesh.geometry[6320+450])
+    # print(mesh.geometry[6320+100])
+    # print(mesh.geometry[6320+0])
+    # print(mesh.geometry[6320+1])
 
     
     geometry = mesh.geometry

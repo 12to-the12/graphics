@@ -33,17 +33,17 @@ camera.rotate(90,axis='x')
 
 
 
-camera.translate([0,-15,0])
+camera.translate([0,-20,0])
 
 from models.attempt import a
 from object import Scene_Object, OBJ
 
 
-# triangle = OBJ('models/triangle')
-# triangle.name = 'triangle'
+triangle = OBJ('models/triangle')
+triangle.name = 'triangle'
 
-# cube = OBJ('models/cube')
-# cube.name = 'cube'
+cube = OBJ('models/cube')
+cube.name = 'cube'
 
 # # cat = OBJ('models/cat')
 # # cat.name = 'cat'
@@ -51,11 +51,11 @@ from object import Scene_Object, OBJ
 teapot = OBJ('models/teapot')
 teapot.name = 'teapot'
 
-# teapotb = OBJ('models/teapot')
-# teapotb.name = 'teapot'
+teapotb = OBJ('models/teapot')
+teapotb.name = 'teapotb'
 
-# teapotc = OBJ('models/teapot')
-# teapotc.name = 'teapot'
+teapotc = OBJ('models/teapot')
+teapotc.name = 'teapotc'
 
 
 print('<importing Mesh>')
@@ -66,18 +66,25 @@ print('<importing Scene>')
 from scene import Scene
 
 scene = Scene(camera=camera)
-#scene.add_object( teapot )
 scene.add_object( teapot )
-#scene.add_object( teapotc )
+scene.add_object( teapotb )
+scene.add_object( teapotc )
+# scene.add_object( triangle )
+# scene.add_object( cube )
 
 teapot.rotate( 90, axis='x',local=False)
+teapotb.rotate( 90, axis='x',local=False)
+teapotc.rotate( 90, axis='x',local=False)
 
 teapot.geometry_to_origin()
+teapotb.geometry_to_origin()
+teapotc.geometry_to_origin()
 # teapot.origin_to_geometry()
 
 
 
-#teapot.translate([-1,0,0])
+teapotb.translate([-1,0,0])
+teapotc.translate([ 1,0,0])
 
 
 #quit()
@@ -96,13 +103,10 @@ def event_processing():
 @analyze
 def animation():
     mag = 1 / timer.x.fps # one degree per second
-
-    # c = time.perf_counter()
     teapot.rotate(mag * 20, axis='z',local=False)
-    # d = time.perf_counter()
-    # print('c->d',(d-c)*1000)
-    teapot.rotate(mag*30, axis='z',local=True)
-    teapot.rotate(mag*4, axis='y',local=True)
+    teapotb.rotate(mag*30, axis='z',local=True)
+    teapotc.rotate(mag*4, axis='y',local=True)
+    pass
 
 
 

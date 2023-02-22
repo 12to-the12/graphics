@@ -30,18 +30,21 @@ class Scene_Object(Entity):
 
 
     def get_objects():
-        return Scene_Object.list 
-
-    def translate(self,change):
-
-        super().translate(change)
+        return Scene_Object.list
+    
+    def geometry_translate(self, change):
         self.geometry += change
+    
+
       
 
-    def scale(self,factor):
+    def geometry_scale(self,factor):
         """only scales in every direction equally"""
         super().scale(factor)
         self.geometry *= factor
+    
+    def apply_scale(self):
+        self.geometry *= self.scale_factor
 
     @analyze
     def rotate(self,degrees,local=True,axis='Z'):
