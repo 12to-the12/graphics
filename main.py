@@ -33,7 +33,7 @@ camera.rotate(90,axis='x')
 
 
 
-camera.translate([0,-20,0])
+camera.translate([0,-25,0])
 
 from models.attempt import a
 from object import Scene_Object, OBJ
@@ -83,8 +83,8 @@ teapotc.geometry_to_origin()
 
 
 
-teapotb.translate([-1,0,0])
-teapotc.translate([ 1,0,0])
+teapotb.translate([-5,0,0])
+teapotc.translate([ 5,0,0])
 
 
 #quit()
@@ -103,9 +103,17 @@ def event_processing():
 @analyze
 def animation():
     mag = 1 / timer.x.fps # one degree per second
-    teapot.rotate(mag * 20, axis='z',local=False)
-    teapotb.rotate(mag*30, axis='z',local=True)
-    teapotc.rotate(mag*4, axis='y',local=True)
+    teapot.rotate(mag * -10, axis='z',local=False)
+    teapot.rotate(mag*30, axis='z',local=True)
+    teapot.rotate(mag*4, axis='y',local=True)
+
+    teapotb.rotate(mag * 30, axis='z',local=False)
+    teapotb.rotate(mag*3, axis='z',local=True)
+    teapotb.rotate(mag*-2, axis='y',local=True)
+
+    teapotc.rotate(mag * 50, axis='z',local=False)
+    teapotc.rotate(mag*-70, axis='z',local=True)
+    teapotc.rotate(mag*-60, axis='y',local=True)
     pass
 
 
