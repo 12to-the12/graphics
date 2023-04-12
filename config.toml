@@ -11,10 +11,10 @@ mermaid = true # generates a mermaid diagram out of the function flow
 
 
 [window]
-h_res = 1500 # actual endpoint size
-v_res = 750
-smoothscale = true
-scaling = 1 # horizontal pixels that go into making a single pixel
+h_res = 2560 # actual endpoint size
+v_res = 1440
+smoothscale = false
+scaling = 4 # horizontal pixels that go into making a single pixel
 
 [camera]
 focal_length=20
@@ -27,14 +27,14 @@ far_cull=1000
 [raster]
 occlusion = true
 weight = 1
-individual = false # draws individually
+individual = true # draws individually
 # NOTICE; stalls frame if you try to smoothscale
 # best practice is scaling = 1
-# if on, scaling is overriden to be 1
+# if on, scaling is overridden to be 1
 
 draw_color = [0,0,0] # draw color
-face_color = [255,255,255]
-background = [255,255,255] # background color
+face_color = [0,255,0]
+background = [0,0,0] # background color
 
 [timing]
 running_avg_size = 100 # the number of past timings to factor into the average
