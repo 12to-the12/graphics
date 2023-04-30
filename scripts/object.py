@@ -1,10 +1,10 @@
-from entity import Entity
-from vector_math import arbitrary_axis_rotation
+from scripts.entity import Entity
+from scripts.vector_math import arbitrary_axis_rotation
 import numpy as np
-from timer import timer
+from scripts.timer import timer
 from numba import prange, njit
 import typing
-from analysis import analyze
+from scripts.analysis import analyze
 class Scene_Object(Entity):
     """a physical object that exists in a scene to be rendered
     info about vertices, faces, textures coordinates, and normals

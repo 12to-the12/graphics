@@ -1,9 +1,9 @@
 
-from geometry_pipeline import *
-from mesh import Mesh
+from scripts.geometry_pipeline import *
+from scripts.mesh import Mesh
 import pygame
-from analysis import analyze
-from config import config
+from scripts.analysis import analyze
+from scripts.config import config
 import random, time
 
 @analyze

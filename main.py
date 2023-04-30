@@ -1,16 +1,16 @@
 #!/usr/bin/env python3.10.9
-from clear_terminal import clear_terminal
+from scripts.clear_terminal import clear_terminal
 clear_terminal()
-from alert import alert
+from scripts.alert import alert
 alert('<fetching>')
-import fetch
+import scripts.fetch as fetch
 clear_terminal()
 alert('<fetched>')
 
-from config import config
-from timer import t, fps
-import timer
-from analysis import analyze, dump
+from scripts.config import config
+from scripts.timer import t, fps
+import scripts.timer as timer
+from scripts.analysis import analyze, dump
 import time
 import random
 
@@ -26,7 +26,7 @@ screen = pygame.display.set_mode((h_res, v_res))
 clock = pygame.time.Clock()
 
 alert('<initializing camera>')
-from camera import Camera
+from scripts.camera import Camera
 camera = Camera( aspect_ratio = (h_res/v_res),**config['camera'] )
 
 camera.rotate(90,axis='x')
@@ -36,7 +36,7 @@ camera.rotate(90,axis='x')
 camera.translate([0,-25,0])
 
 from models.attempt import a
-from object import Scene_Object, OBJ
+from scripts.object import Scene_Object, OBJ
 
 
 triangle = OBJ('models/triangle')
@@ -59,11 +59,11 @@ teapotc.name = 'teapotc'
 
 
 print('<importing Mesh>')
-from mesh import Mesh
+from scripts.mesh import Mesh
 print('<importing render>')
-from render import render
+from scripts.render import render
 print('<importing Scene>')
-from scene import Scene
+from scripts.scene import Scene
 
 scene = Scene(camera=camera)
 scene.add_object( teapot )

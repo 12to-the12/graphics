@@ -1,10 +1,10 @@
-from alert import alert
+from scripts.alert import alert
 alert('<top of vector_math>')
 
 import numpy as np
-from clear_terminal import clear_terminal
+from scripts.clear_terminal import clear_terminal
 
-from analysis import analyze
+from scripts.analysis import analyze
 from numba import njit, float64, f8, i4, prange, boolean
 
 alert('<compiling vector_math>')

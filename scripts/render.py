@@ -1,14 +1,14 @@
 print('<top of render>')
-from ray_cast import ray_cast
+from scripts.ray_cast import ray_cast
 import pygame
-from mesh import Mesh
-from geometry_pipeline import *
-from object import Scene_Object
-from draw import draw_points, draw_polygons
-from timer import timer, t
-from tree import tree
-from analysis import analyze
-from config import config
+from scripts.mesh import Mesh
+from scripts.geometry_pipeline import *
+from scripts.object import Scene_Object
+from scripts.draw import draw_points, draw_polygons
+from scripts.timer import timer, t
+from scripts.tree import tree
+from scripts.analysis import analyze
+from scripts.config import config
 print('<bottom of render>')
 
 

@@ -1,7 +1,7 @@
-from clear_terminal import clear_terminal
+from scripts.clear_terminal import clear_terminal
 from time import time, perf_counter, sleep
-from tree import tree
-from config import config
+from scripts.tree import tree
+from scripts.config import config
 import numpy as np
 import functools
 # from rich.console import Console

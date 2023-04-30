@@ -1,4 +1,4 @@
-from object import Scene_Object
+from scripts.object import Scene_Object
 import numpy as np
 class Scene:
     def __init__(self, camera=None, objects=None, lights=None, world=None):

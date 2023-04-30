@@ -1,5 +1,5 @@
 import functools
-from clear_terminal import clear_terminal
+from scripts.clear_terminal import clear_terminal
 from clipboard import copy
 
 def tree(funct):

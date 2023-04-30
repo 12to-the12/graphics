@@ -1,10 +1,10 @@
 
 import numpy as np
-from vector_math import single__axis_rotation, arbitrary_axis_rotation, normalize
-from vector_math import orthogonal, angle
-from clear_terminal import clear_terminal
+from scripts.vector_math import single__axis_rotation, arbitrary_axis_rotation, normalize
+from scripts.vector_math import orthogonal, angle
+from scripts.clear_terminal import clear_terminal
 import math
-from entity import Entity
+from scripts.entity import Entity
 import numpy as np
 
 Z      = np.array([ 0., 0., 1.])

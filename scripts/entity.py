@@ -1,8 +1,8 @@
 import numpy as np
-from vector_math import single__axis_rotation, orthogonal, angle
-from timer import t
-from tree import tree
-from analysis import analyze
+from scripts.vector_math import single__axis_rotation, orthogonal, angle
+from scripts.timer import t
+from scripts.tree import tree
+from scripts.analysis import analyze
 import time
 
 def arr(x): return np.array(x)
