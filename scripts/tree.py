@@ -1,6 +1,6 @@
 import functools
 from scripts.clear_terminal import clear_terminal
-from clipboard import copy
+# from clipboard import copy
 
 def tree(funct):
     """wrapper

@@ -1,7 +1,6 @@
-#!/bin/bash
-echo building virtual enviroment...
-python -m venv venv
-echo activating virtual enviroment...
+#/bin/bash
+rm -rf venv
+python3.10 -m venv venv
 source venv/bin/activate
-echo installing requirements...
-pip install -r ./requirements.txt
+pip install --upgrade pip
+# pip install -r requirements.txt

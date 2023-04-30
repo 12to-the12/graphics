@@ -27,7 +27,7 @@ far_cull=1000
 [raster]
 occlusion = true
 weight = 4
-individual = true # draws individually
+individual = false # draws individually
 # NOTICE; stalls frame if you try to smoothscale
 # best practice is scaling = 1
 # if on, scaling is overridden to be 1
