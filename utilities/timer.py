@@ -1,7 +1,7 @@
-from scripts.clear_terminal import clear_terminal
+from utilities.clear_terminal import clear_terminal
 from time import time, perf_counter, sleep
-from scripts.tree import tree
-from scripts.config import config
+from utilities.tree import tree
+from utilities.config import config
 import numpy as np
 import functools
 # from rich.console import Console
@@ -44,7 +44,7 @@ def fps(funct):
 indent = -1
 timings = {} # [name] = (count, value)
 timings['update'] = np.array([0,1])
-running_avg_size = config['timing']['running_avg_size']
+running_avg_size = config.timing.running_avg_size
 
 def t(funct):
     """wrapper

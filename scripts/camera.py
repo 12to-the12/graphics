@@ -2,18 +2,18 @@
 import numpy as np
 from scripts.vector_math import single__axis_rotation, arbitrary_axis_rotation, normalize
 from scripts.vector_math import orthogonal, angle
-from scripts.clear_terminal import clear_terminal
+from utilities.clear_terminal import clear_terminal
 import math
 from scripts.entity import Entity
 import numpy as np
+from utilities.vectors import *
+from utilities.config import config
 
-Z      = np.array([ 0., 0., 1.])
-n_Z    = np.array([ 0., 0.,-1.])
-Y      = np.array([ 0., 1., 0.])
+cam_config = config.camera
 
 class Camera(Entity):
     """a camera entity derived from the entity class"""
-    def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
+    def __init__(self, aspect_ratio=1., focal_length=cam_config.focal_length, sensor_width=cam_config.sensor_width, close_cull=cam_config.close_cull, far_cull=cam_config.far_cull):
         """aspect ratio is width over height, ergo width if height was one"""
         super().__init__(view_vector=n_Z, up_vector=Y)
         self.aspect_ratio = aspect_ratio
@@ -71,33 +71,33 @@ class Camera(Entity):
             axis_b = n_Z
 
         return [axis_a,angle_a,axis_b,angle_b]
-        alert(f"angle a:\t{angle_a}")
-        alert(f" axis a:\t{axis_a}")
+        # alert(f"angle a:\t{angle_a}")
+        # alert(f" axis a:\t{axis_a}")
 
-        alert(f"angle b:\t{angle_b}")
-        alert(f" axis b:\t{axis_b}")
+        # alert(f"angle b:\t{angle_b}")
+        # alert(f" axis b:\t{axis_b}")
 
 
-        intermediary_view = arbitrary_axis_rotation(self.view_vector,axis_a,angle_a)
-        alert(f"intermediary view: {intermediary_view}")
-        alert(f"intermediary up: {intermediary_up}")
-        final_view = arbitrary_axis_rotation(intermediary_view,axis_b,angle_b)
-        final_up   = arbitrary_axis_rotation(intermediary_up,  axis_b,angle_b)
-        alert(f"final view: {final_view}")
-        alert(f"final up:   {final_up}")
-        intermediary_view = arbitrary_axis_rotation(final_view,axis_b,-angle_b)
-        intermediary_up   = arbitrary_axis_rotation(final_up,  axis_b,-angle_b)
-        alert(f"intermediary view: {intermediary_view}")
-        alert(f"intermediary up: {intermediary_up}")
-        output_view = arbitrary_axis_rotation(intermediary_view,axis_a,-angle_a)
-        output_up   = arbitrary_axis_rotation(intermediary_up,  axis_a,-angle_a)
-        alert()
-        alert(f"output view:  \t{output_view}")
-        alert(f"starting view:\t{self.view_vector}")
-        alert()
-        alert(f"output up:    \t{output_up}")
-        alert(f"starting up:  \t{self.up_vector}")
-        alert()
+        # intermediary_view = arbitrary_axis_rotation(self.view_vector,axis_a,angle_a)
+        # alert(f"intermediary view: {intermediary_view}")
+        # alert(f"intermediary up: {intermediary_up}")
+        # final_view = arbitrary_axis_rotation(intermediary_view,axis_b,angle_b)
+        # final_up   = arbitrary_axis_rotation(intermediary_up,  axis_b,angle_b)
+        # alert(f"final view: {final_view}")
+        # alert(f"final up:   {final_up}")
+        # intermediary_view = arbitrary_axis_rotation(final_view,axis_b,-angle_b)
+        # intermediary_up   = arbitrary_axis_rotation(final_up,  axis_b,-angle_b)
+        # alert(f"intermediary view: {intermediary_view}")
+        # alert(f"intermediary up: {intermediary_up}")
+        # output_view = arbitrary_axis_rotation(intermediary_view,axis_a,-angle_a)
+        # output_up   = arbitrary_axis_rotation(intermediary_up,  axis_a,-angle_a)
+        # alert()
+        # alert(f"output view:  \t{output_view}")
+        # alert(f"starting view:\t{self.view_vector}")
+        # alert()
+        # alert(f"output up:    \t{output_up}")
+        # alert(f"starting up:  \t{self.up_vector}")
+        # alert()
 
         
 

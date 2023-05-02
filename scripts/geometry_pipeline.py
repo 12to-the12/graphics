@@ -1,13 +1,13 @@
 
 from scripts.vector_math import arbitrary_axis_rotation, normal_of_polygons
-from scripts.alert import alert
-from scripts.analysis import analyze
+from utilities.alert import alert
+from utilities.analysis import analyze
 import numpy as np
 from numpy import linalg
-import numpy.typing as npt
+# import numpy.typing as npt
 from scripts.camera import Camera
-from scripts.timer import t
-from scripts.tree import tree
+# from utilities.timer import t
+# from utilities.tree import tree
 alert('<compiling geometry_pipeline>')
 
 @analyze

@@ -1,18 +1,13 @@
 import numpy as np
 from scripts.vector_math import single__axis_rotation, orthogonal, angle
-from scripts.timer import t
-from scripts.tree import tree
-from scripts.analysis import analyze
+from utilities.timer import t
+from utilities.tree import tree
+from utilities.analysis import analyze
+from utilities.vectors import *
+
 import time
 
-def arr(x): return np.array(x)
 
-world_origin = arr([ 0., 0., 0.])
-n_Z    = np.array([ 0., 0.,-1.])
-
-X = np.array([ 1., 0., 0.])
-Y = np.array([ 0., 1., 0.])
-Z = np.array([ 0., 0., 1.])
 class Entity:
     def __init__(self, origin=world_origin,view_vector=Y,up_vector=Z):
         self.origin = world_origin

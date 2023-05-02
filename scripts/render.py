@@ -5,18 +5,20 @@ from scripts.mesh import Mesh
 from scripts.geometry_pipeline import *
 from scripts.object import Scene_Object
 from scripts.draw import draw_points, draw_polygons
-from scripts.timer import timer, t
-from scripts.tree import tree
-from scripts.analysis import analyze
-from scripts.config import config
+from utilities.timer import timer, t
+from utilities.tree import tree
+from utilities.analysis import analyze
+from utilities.config import config
+
 print('<bottom of render>')
 
 
 
     
-h_res = config['window']['h_res']
-v_res = config['window']['v_res']
-scaling = config['window']['scaling']
+h_res = config.window.h_res
+v_res = config.window.v_res
+scaling = config.window.scaling
+
 dimensions = np.array(([h_res, v_res]))
 assert type(h_res) == int, print(type(h_res))
 assert type(v_res) == int, print(type(v_res))
@@ -26,7 +28,7 @@ assert type(scaling) == int or float, print(type(scaling))
 
 @analyze
 def scale(canvas):
-    if config["window"]["smoothscale"]:
+    if config.window.smoothscale:
         return pygame.transform.smoothscale(canvas, (h_res, v_res) ) # canvas, target
     else:
         return pygame.transform.scale(canvas, (h_res, v_res) ) # canvas, target
@@ -51,11 +53,11 @@ def render( screen=None, scene=None , scaling=1):
     # this line calls ray_cast on the given scene information
     #
     
-    if config['render_method'] == 'points':
+    if config.render_method == 'points':
         canvas = draw_points(canvas=canvas, scene=scene)
-    elif config['render_method'] == 'polygons':
+    elif config.render_method == 'polygons':
         canvas = draw_polygons(canvas=canvas, scene=scene)
-    elif config['render_method'] == 'ray_cast':
+    elif config.render_method == 'ray_cast':
         canvas = ray_cast(canvas=canvas, scene=scene)
     else:
         raise Exception('config configured incorrectly, invalid render_method')

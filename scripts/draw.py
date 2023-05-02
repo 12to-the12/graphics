@@ -2,8 +2,8 @@
 from scripts.geometry_pipeline import *
 from scripts.mesh import Mesh
 import pygame
-from scripts.analysis import analyze
-from scripts.config import config
+from utilities.analysis import analyze
+from utilities.config import config
 import random, time
 
 @analyze
@@ -33,24 +33,26 @@ def draw_points(canvas=None, scene=None):
 
     return canvas
 
-h_res = config['window']['h_res']
-v_res = config['window']['v_res']
-scaling = config['window']['scaling']
+window = config.window
+h_res = window.h_res
+v_res = window.v_res
+scaling = window.scaling
 dimensions = np.array(([h_res, v_res]))
 
-occlusion = config['raster']['occlusion']
-individual = config['raster']['individual']
-width = config['raster']['weight'] # line weight
+raster = config.raster
+occlusion = raster.occlusion
+individual = raster.individual
+width = raster.weight # line weight
 # else: width = 0
 
-draw_color = config['raster']['draw_color']
-face_color = config['raster']['face_color']
-background = config['raster']['background']
+draw_color = raster.draw_color
+face_color = raster.face_color
+background = raster.background
 
 
 
 @analyze
-def loop(coords=None, canvas=None, width=None):
+def rasterize_polygons(coords=None, canvas=None, width=None):
     assert not coords is None, 'coords not defined'
     assert not canvas is None, 'canvas not defined'
     assert not width is None, 'no width specified'
@@ -123,7 +125,7 @@ def draw_polygons(canvas=None, scene=None, individual=False):
     
     
 
-    loop(coords=coords, canvas=canvas, width=width)
+    rasterize_polygons(coords=coords, canvas=canvas, width=width)
     
 
 

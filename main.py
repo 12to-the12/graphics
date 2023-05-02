@@ -1,18 +1,13 @@
 #!/usr/bin/env python3.10.9
-from scripts.clear_terminal import clear_terminal
+from utilities.clear_terminal import clear_terminal
 clear_terminal()
-from scripts.alert import alert
-alert('<fetching>')
-import scripts.fetch as fetch
-clear_terminal()
-alert('<fetched>')
+from utilities.alert import alert
 
-from scripts.config import config
-from scripts.timer import t, fps
-import scripts.timer as timer
-from scripts.analysis import analyze, dump
-import time
-import random
+from utilities.config import config, config_dict
+from utilities.timer import t, fps
+import utilities.timer as timer
+from utilities.analysis import analyze
+
 
 import numpy as np
 np.set_printoptions(suppress=True) # suppresses scientific notation
@@ -20,14 +15,22 @@ np.set_printoptions(suppress=True) # suppresses scientific notation
 alert('<initializing pygame>')
 import pygame
 pygame.init()
-h_res = config['window']['h_res']
-v_res = config['window']['v_res']
-screen = pygame.display.set_mode((h_res, v_res))
+h_res = config.window.h_res
+v_res = config.window.v_res
 clock = pygame.time.Clock()
+
+# flags = pygame.FULLSCREEN | pygame.DOUBLEBUF
+flags = pygame.DOUBLEBUF
+
+screen = pygame.display.set_mode((h_res, v_res), flags)
+
+screen.set_alpha(None)
+pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
+    # def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
 
 alert('<initializing camera>')
 from scripts.camera import Camera
-camera = Camera( aspect_ratio = (h_res/v_res),**config['camera'] )
+camera = Camera( aspect_ratio = (h_res/v_res))
 
 camera.rotate(90,axis='x')
 
@@ -141,13 +144,14 @@ def update():
     #timer.clear_buffer()
     application()
     
-    image = render(screen=screen, scene=scene, scaling=config['window']['scaling'])
+    image = render(screen=screen, scene=scene, scaling=config.window.scaling)
     
     render_to_screen(image=image, screen=screen)
     printout()
 
 timer.dump()
-while True:
+
+while 1:
     update()
     
 

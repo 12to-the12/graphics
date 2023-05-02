@@ -1,5 +1,5 @@
 import numpy as np
-from scripts.analysis import analyze
+from utilities.analysis import analyze
 
 class Mesh:
     """a mesh to be rendered"""
