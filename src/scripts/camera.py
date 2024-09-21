@@ -75,32 +75,6 @@ class Camera(Entity):
             axis_b = n_Z
 
         return [axis_a, angle_a, axis_b, angle_b]
-        # alert(f"angle a:\t{angle_a}")
-        # alert(f" axis a:\t{axis_a}")
-
-        # alert(f"angle b:\t{angle_b}")
-        # alert(f" axis b:\t{axis_b}")
-
-        # intermediary_view = arbitrary_axis_rotation(self.view_vector,axis_a,angle_a)
-        # alert(f"intermediary view: {intermediary_view}")
-        # alert(f"intermediary up: {intermediary_up}")
-        # final_view = arbitrary_axis_rotation(intermediary_view,axis_b,angle_b)
-        # final_up   = arbitrary_axis_rotation(intermediary_up,  axis_b,angle_b)
-        # alert(f"final view: {final_view}")
-        # alert(f"final up:   {final_up}")
-        # intermediary_view = arbitrary_axis_rotation(final_view,axis_b,-angle_b)
-        # intermediary_up   = arbitrary_axis_rotation(final_up,  axis_b,-angle_b)
-        # alert(f"intermediary view: {intermediary_view}")
-        # alert(f"intermediary up: {intermediary_up}")
-        # output_view = arbitrary_axis_rotation(intermediary_view,axis_a,-angle_a)
-        # output_up   = arbitrary_axis_rotation(intermediary_up,  axis_a,-angle_a)
-        # alert()
-        # alert(f"output view:  \t{output_view}")
-        # alert(f"starting view:\t{self.view_vector}")
-        # alert()
-        # alert(f"output up:    \t{output_up}")
-        # alert(f"starting up:  \t{self.up_vector}")
-        # alert()
 
 
 if __name__ == "__main__":

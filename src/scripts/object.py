@@ -15,7 +15,7 @@ class Scene_Object(Entity):
     material object too, maybe per face"""
 
     count = 0
-    list = []
+    list_: list[Entity] = []
 
     def __init__(self, geometry, name=None):
         # bounding box, source geometry, translated, shader, textures
@@ -27,14 +27,14 @@ class Scene_Object(Entity):
             self.name = name
         else:
             self.name = self.index
-        Scene_Object.list.append(self)
+        Scene_Object.list_.append(self)
 
         self.source_geometry = geometry
         # following subject to transformations
         self.geometry = self.source_geometry
 
-    def get_objects():
-        return Scene_Object.list
+    def get_objects(self):
+        return Scene_Object.list_
 
     def geometry_translate(self, change):
         self.geometry += change

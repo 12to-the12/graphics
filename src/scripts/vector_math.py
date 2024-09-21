@@ -1,5 +1,5 @@
 import time
-from numba import njit, float64, f8, i4, prange, boolean
+from numba import njit, float64, f8, i4, prange, boolean  # type: ignore
 from utilities.analysis import analyze
 from utilities.clear_terminal import clear_terminal
 import numpy as np
@@ -95,11 +95,11 @@ def normal_of_polygon(points):
     return normal
 
 
-@njit(float64[:, :](float64[:, :, :]), cache=True)
+@njit(float64[:, :](float64[:, :, :]), cache=True, parallel=True)
 def normal_of_polygons(polygons):
     poly_count = polygons.shape[0]
     out = np.empty((poly_count, 3))
-    for index in range(poly_count):
+    for index in prange(poly_count):
         out[index] = normal_of_polygon(polygons[index])
     return out
 

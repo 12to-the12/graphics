@@ -21,25 +21,18 @@ pygame.init()
 h_res = config.window.h_res
 v_res = config.window.v_res
 clock = pygame.time.Clock()
-
 # flags = pygame.FULLSCREEN | pygame.DOUBLEBUF
 flags = pygame.DOUBLEBUF
-
 screen = pygame.display.set_mode((h_res, v_res), flags)
-
 screen.set_alpha(None)
 pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
 # def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
 
 
-from scripts.attempt import a
-
 from scenes.teapots import teapot_scene, animation
+from scripts.scene import Scene
 
-teapot_scene = teapot_scene(config)
-
-
-alert("<running loop>")
+scene: Scene = teapot_scene(config)
 
 
 @analyze
@@ -61,7 +54,7 @@ def render_to_screen(image=None, screen=None):
 def application():
     """this is the stuff that determines what the scene object is"""
     event_processing()
-    animation(teapot_scene, timer)
+    animation(scene, timer)
 
 
 @analyze
@@ -80,13 +73,14 @@ def update():
     # timer.clear_buffer()
     application()
 
-    image = render(screen=screen, scene=teapot_scene, scaling=config.window.scaling)
+    image = render(screen=screen, scene=scene, scaling=config.window.scaling)
 
     render_to_screen(image=image, screen=screen)
     printout()
 
 
-timer.dump()
+printout()
+alert("<running loop>")
 
 if __name__ == "__main__":
     while 1:

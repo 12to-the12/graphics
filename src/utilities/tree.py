@@ -39,7 +39,7 @@ def tree(funct):
 
 
 buffer = ""
-blocks = []
+blocks: list[str] = []
 indent = -1
 prev_indent = indent
 

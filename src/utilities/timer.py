@@ -103,7 +103,7 @@ def push(message, end="\n"):
 
 def pprint(message, value, suffix="ms", end="\n"):
     """pushes message+value to the message heap"""
-    assert type(value) == np.float64 or float, f"{type(value)}"
+    assert (type(value) == np.float64) or (type(value) == float), f"{type(value)}"
     assert type(message) == str, f"{message}"
     value = round(value, 2)
     push(f"{message :<36s}:{value :>4.0f} {suffix}", end=end)

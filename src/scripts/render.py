@@ -20,7 +20,7 @@ scaling = config.window.scaling
 dimensions = np.array(([h_res, v_res]))
 assert type(h_res) == int, print(type(h_res))
 assert type(v_res) == int, print(type(v_res))
-assert type(scaling) == int or float, print(type(scaling))
+assert (type(scaling) == int) or (type(scaling) == float), print(type(scaling))
 
 
 @analyze

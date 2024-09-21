@@ -4,8 +4,7 @@ from scripts.mesh import Mesh
 from scripts.geometry_pipeline import project_in_camera_space
 from scripts.vector_math import normalize, norm, normal_of_polygon
 import numpy as np
-import numba
-from numba import njit, float64, boolean, guvectorize, prange
+from numba import njit, float64, boolean, guvectorize, prange  # type: ignore
 from utilities.alert import alert
 
 # alert('<top of ray_cast>')
@@ -239,10 +238,10 @@ def ray_cast(
 
 
 if __name__ == "__main__":
-    ray = [0.0, 0.0, -1.0]  # [ 0.31622777,  0.,         -0.9486833 ]
-    polygon = [[4.0, -3.0, -10.0], [0.0, 2.0, -10.0], [-3.0, -1.0, -10.0]]
-    ray = np.array(ray)
-    polygon = np.array(polygon)
+
+    ray: np.ndarray = np.array([0.0, 0.0, -1.0])
+
+    polygon: np.ndarray = np.array([[4.0, -3.0, -10.0], [0.0, 2.0, -10.0], [-3.0, -1.0, -10.0]])
     print()
     timer("init")
     print(ray_triangle_intersection(ray, polygon))

@@ -3,7 +3,6 @@ from utilities.clear_terminal import clear_terminal
 
 import utilities.timer as timer, utilities.tree as tree
 from utilities.timer import t
-from utilities.tree import tree
 
 
 def analyze(funct):
