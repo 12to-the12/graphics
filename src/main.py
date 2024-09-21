@@ -32,10 +32,9 @@ pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
 # def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
 
 
-
 from scripts.attempt import a
 
-from scenes.teapots import teapot_scene
+from scenes.teapots import teapot_scene, animation
 
 teapot_scene = teapot_scene(config)
 
@@ -52,22 +51,6 @@ def event_processing():
 
 
 @analyze
-def animation():
-    mag = 1 / timer.x.fps  # one degree per second
-    teapot_scene.objects[0].rotate(mag * -10, axis="z", local=False)
-    teapot_scene.objects[0].rotate(mag * 30, axis="z", local=True)
-    teapot_scene.objects[0].rotate(mag * 4, axis="y", local=True)
-
-    teapot_scene.objects[1].rotate(mag * 30, axis="z", local=False)
-    teapot_scene.objects[1].rotate(mag * 3, axis="z", local=True)
-    teapot_scene.objects[1].rotate(mag * -2, axis="y", local=True)
-
-    teapot_scene.objects[2].rotate(mag * 50, axis="z", local=False)
-    teapot_scene.objects[2].rotate(mag * -70, axis="z", local=True)
-    teapot_scene.objects[2].rotate(mag * -60, axis="y", local=True)
-
-
-@analyze
 def render_to_screen(image=None, screen=None):
     assert image and screen
     screen.blit(image, (0, 0))
@@ -78,7 +61,7 @@ def render_to_screen(image=None, screen=None):
 def application():
     """this is the stuff that determines what the scene object is"""
     event_processing()
-    animation()
+    animation(teapot_scene, timer)
 
 
 @analyze
@@ -105,5 +88,6 @@ def update():
 
 timer.dump()
 
-while 1:
-    update()
+if __name__ == "__main__":
+    while 1:
+        update()

@@ -1,5 +1,7 @@
 print("<importing Scene>")
 from scripts.scene import Scene
+from utilities.timer import timer
+from utilities.analysis import analyze
 from utilities.alert import alert
 
 
@@ -53,3 +55,19 @@ def teapot_scene(config) -> Scene:
     teapotc.translate([5, 0, 0])
 
     return scene
+
+
+@analyze
+def animation(scene, timer):
+    mag = 1 / timer.x.fps  # one degree per second
+    scene.objects[0].rotate(mag * -10, axis="z", local=False)
+    scene.objects[0].rotate(mag * 30, axis="z", local=True)
+    scene.objects[0].rotate(mag * 4, axis="y", local=True)
+
+    scene.objects[1].rotate(mag * 30, axis="z", local=False)
+    scene.objects[1].rotate(mag * 3, axis="z", local=True)
+    scene.objects[1].rotate(mag * -2, axis="y", local=True)
+
+    scene.objects[2].rotate(mag * 50, axis="z", local=False)
+    scene.objects[2].rotate(mag * -70, axis="z", local=True)
+    scene.objects[2].rotate(mag * -60, axis="y", local=True)
