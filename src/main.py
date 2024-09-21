@@ -32,69 +32,14 @@ pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
 # def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
 
 alert("<initializing camera>")
-from scripts.camera import Camera
 
-camera = Camera(aspect_ratio=(h_res / v_res))
-
-camera.rotate(90, axis="x")
-
-
-camera.translate([0, -25, 0])
 
 from scripts.attempt import a
-from scripts.object import Scene_Object, OBJ
 
+from scenes.teapots import teapot_scene
 
-triangle = OBJ("models/triangle")
-triangle.name = "triangle"
+teapot_scene = teapot_scene(config)
 
-cube = OBJ("models/cube")
-cube.name = "cube"
-
-# # cat = OBJ('models/cat')
-# # cat.name = 'cat'
-
-teapot = OBJ("models/teapot")
-teapot.name = "teapot"
-
-teapotb = OBJ("models/teapot")
-teapotb.name = "teapotb"
-
-teapotc = OBJ("models/teapot")
-teapotc.name = "teapotc"
-
-
-print("<importing Mesh>")
-from scripts.mesh import Mesh
-
-print("<importing render>")
-from scripts.render import render
-
-print("<importing Scene>")
-from scripts.scene import Scene
-
-scene = Scene(camera=camera)
-scene.add_object(teapot)
-scene.add_object(teapotb)
-scene.add_object(teapotc)
-# scene.add_object( triangle )
-# scene.add_object( cube )
-
-teapot.rotate(90, axis="x", local=False)
-teapotb.rotate(90, axis="x", local=False)
-teapotc.rotate(90, axis="x", local=False)
-
-teapot.geometry_to_origin()
-teapotb.geometry_to_origin()
-teapotc.geometry_to_origin()
-# teapot.origin_to_geometry()
-
-
-teapotb.translate([-5, 0, 0])
-teapotc.translate([5, 0, 0])
-
-
-# quit()
 
 alert("<running loop>")
 
@@ -110,18 +55,17 @@ def event_processing():
 @analyze
 def animation():
     mag = 1 / timer.x.fps  # one degree per second
-    teapot.rotate(mag * -10, axis="z", local=False)
-    teapot.rotate(mag * 30, axis="z", local=True)
-    teapot.rotate(mag * 4, axis="y", local=True)
+    teapot_scene.objects[0].rotate(mag * -10, axis="z", local=False)
+    teapot_scene.objects[0].rotate(mag * 30, axis="z", local=True)
+    teapot_scene.objects[0].rotate(mag * 4, axis="y", local=True)
 
-    teapotb.rotate(mag * 30, axis="z", local=False)
-    teapotb.rotate(mag * 3, axis="z", local=True)
-    teapotb.rotate(mag * -2, axis="y", local=True)
+    teapot_scene.objects[1].rotate(mag * 30, axis="z", local=False)
+    teapot_scene.objects[1].rotate(mag * 3, axis="z", local=True)
+    teapot_scene.objects[1].rotate(mag * -2, axis="y", local=True)
 
-    teapotc.rotate(mag * 50, axis="z", local=False)
-    teapotc.rotate(mag * -70, axis="z", local=True)
-    teapotc.rotate(mag * -60, axis="y", local=True)
-    pass
+    teapot_scene.objects[2].rotate(mag * 50, axis="z", local=False)
+    teapot_scene.objects[2].rotate(mag * -70, axis="z", local=True)
+    teapot_scene.objects[2].rotate(mag * -60, axis="y", local=True)
 
 
 @analyze
@@ -143,6 +87,10 @@ def printout():
     timer.dump()
 
 
+print("<importing render>")
+from scripts.render import render
+
+
 @fps
 @analyze
 def update():
@@ -150,7 +98,7 @@ def update():
     # timer.clear_buffer()
     application()
 
-    image = render(screen=screen, scene=scene, scaling=config.window.scaling)
+    image = render(screen=screen, scene=teapot_scene, scaling=config.window.scaling)
 
     render_to_screen(image=image, screen=screen)
     printout()
