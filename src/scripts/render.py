@@ -50,14 +50,13 @@ def render( screen=None, scene=None , scaling=1):
     # yes, it needs to be here
     canvas = pygame.Surface(dimensions * scaling)
 
-    # this line calls ray_cast on the given scene information
-    #
-    
-    if config.render_method == 'points':
+    render_method = config.render_method
+
+    if render_method == 'points':
         canvas = draw_points(canvas=canvas, scene=scene)
-    elif config.render_method == 'polygons':
+    elif render_method == 'polygons':
         canvas = draw_polygons(canvas=canvas, scene=scene)
-    elif config.render_method == 'ray_cast':
+    elif render_method == 'ray_cast':
         canvas = ray_cast(canvas=canvas, scene=scene)
     else:
         raise Exception('config configured incorrectly, invalid render_method')

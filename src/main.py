@@ -38,7 +38,7 @@ camera.rotate(90,axis='x')
 
 camera.translate([0,-25,0])
 
-from models.attempt import a
+from scripts.attempt import a
 from scripts.object import Scene_Object, OBJ
 
 

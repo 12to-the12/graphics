@@ -11,9 +11,9 @@ mermaid = true # generates a mermaid diagram out of the function flow
 
 
 [window]
-h_res = 1920 # actual endpoint size
-v_res = 1080
-smoothscale = false
+h_res = 720 # actual endpoint size
+v_res = 720
+smoothscale = true
 scaling = 1 # horizontal pixels that go into making a single pixel
 
 [camera]

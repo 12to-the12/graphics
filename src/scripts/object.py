@@ -190,7 +190,7 @@ class OBJ(Scene_Object):
 
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)  # suppresses scientific notation
-    v, vt, vn, f = import_obj('models/teapot.obj')
+    v, vt, vn, f = import_obj('src/models/teapot.obj')
 
     print('v', v.shape)
     print('vt', vt.shape)

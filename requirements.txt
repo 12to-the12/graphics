@@ -1,7 +1,7 @@
 clipboard==0.0.4
-llvmlite==0.39.1
 numba==0.56.4
 numpy==1.23.5
 pygame==2.3.0
-pyperclip==1.8.2
 tomli==2.0.1
+pyglet==2.0.6
+flameprof==0.4
