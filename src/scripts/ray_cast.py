@@ -7,9 +7,10 @@ import numpy as np
 import numba
 from numba import njit, float64, boolean, guvectorize, prange
 from utilities.alert import alert
+
 # alert('<top of ray_cast>')
 
-alert('<compiling ray_cast>')
+alert("<compiling ray_cast>")
 
 
 @njit(float64(float64[:], float64[:]), cache=True)
@@ -26,10 +27,10 @@ def ray_plane_intersection(ray, points):
     # print(dot(ray, N) )
     if dot(ray, N) > 0:
         # print('the plane normal is facing away from the ray')
-        return np.array([0., 0., 0.])
+        return np.array([0.0, 0.0, 0.0])
     if abs(dot(ray, N)) <= 1e-4:
         # print('the plane normal and ray are at right angles, no intersection is possible')
-        return np.array([0., 0., 0.])
+        return np.array([0.0, 0.0, 0.0])
     C = points[0]  # any point that lies on the shared plane
     V = ray
 
@@ -41,9 +42,9 @@ def ray_plane_intersection(ray, points):
     I = ray_origin + k * V
     # print(f'k: {k}')
     if k < 0:
-        return np.array([0., 0., 0.])  # ray is facing away from plaen
+        return np.array([0.0, 0.0, 0.0])  # ray is facing away from plaen
     if k == 0:
-        return np.array([0., 0., 0.])  # ray is on plane I think
+        return np.array([0.0, 0.0, 0.0])  # ray is on plane I think
     # print ('distance:',k)
     return I  # returns the intersection point
 
@@ -56,8 +57,8 @@ def project_vector(a, b):  # projects b onto a
 # @guvectorize([float64[:], float64[:,:],boolean[:]], '(n),(n,n)->(n)', nopython=True)
 @njit([boolean(float64[:], float64[:, :])], cache=True)
 def ray_triangle_intersection(ray, points):
-    ''' this function determines intersection and returns the barycentric 
-    coordinates of the intersection point if there is a hit'''
+    """this function determines intersection and returns the barycentric
+    coordinates of the intersection point if there is a hit"""
     # print(f'ray:{ray}')
     # print(f'points:{points}')
     # print()
@@ -125,30 +126,28 @@ def generate_rays(x_res, y_res, z, random=False, norm=True):
     # print(f'y_res: {y_res}')
     # print(f'z: {z}')
     size = x_res
-    start = -size/2
+    start = -size / 2
     end = start + size
     x_rays = np.arange(start, end)
-    assert len(
-        x_rays.shape) == 1, f'x_rays shouldn\'t be shaped {x_rays.shape}'
+    assert len(x_rays.shape) == 1, f"x_rays shouldn't be shaped {x_rays.shape}"
     size = y_res
-    start = -size/2
+    start = -size / 2
     end = start + size
 
     y_rays = np.arange(start, end)
     # because otherwise it would start with negative values
     y_rays = np.flip(y_rays, 0)
-    assert len(
-        y_rays.shape) == 1, f'y_rays shouldn\'t be shaped {y_rays.shape}'
+    assert len(y_rays.shape) == 1, f"y_rays shouldn't be shaped {y_rays.shape}"
 
     a, b = np.meshgrid(x_rays, y_rays)
     # this creates a list of coordinate pairs based on the inputted axes
     table = np.dstack([a, b]).reshape(-1, 2)
 
     if random:
-        table += np.random.random([y_res*x_res, 2])
+        table += np.random.random([y_res * x_res, 2])
     else:
         table += 0.5
-    out = np.hstack([table, np.full([x_res*y_res, 1], -z)])
+    out = np.hstack([table, np.full([x_res * y_res, 1], -z)])
 
     # print(f'out: {out}')
     # print(out.dtype)
@@ -158,7 +157,9 @@ def generate_rays(x_res, y_res, z, random=False, norm=True):
 
 
 # @njit(parallel=True)
-def ray_cast(canvas=None, scene=None, samples=10, reflection_budget=0, refraction_budget=0):
+def ray_cast(
+    canvas=None, scene=None, samples=10, reflection_budget=0, refraction_budget=0
+):
     """
     returns a numpy shape (-1,-1,3) array
 
@@ -180,8 +181,8 @@ def ray_cast(canvas=None, scene=None, samples=10, reflection_budget=0, refractio
 
     """
 
-    assert canvas, 'no canvas passed for ray_cast'
-    assert scene, 'no scene passed for ray_cast'
+    assert canvas, "no canvas passed for ray_cast"
+    assert scene, "no scene passed for ray_cast"
 
     camera = scene.camera
     objects = scene.objects
@@ -202,26 +203,27 @@ def ray_cast(canvas=None, scene=None, samples=10, reflection_budget=0, refractio
     mesh = Mesh()
     mesh.build(scene.objects)
 
-    geometry = project_in_camera_space(
-        mesh.geometry.reshape(-1, 3), camera).reshape(-1, 3, 3)
+    geometry = project_in_camera_space(mesh.geometry.reshape(-1, 3), camera).reshape(
+        -1, 3, 3
+    )
     # geometry *= np.array([1,1,-1]) # don't use, thought it was necessary, it's not
     # print(f'projected geometry:{geometry}')
     # print(rays.shape)
     # print(f'rays [4] :{rays[4]}')
     mask = np.full([rays.shape[0]], False)
     # alert('<casting rays>')
-    timer('projection')
-    print(f'rays:\t{rays.shape}')
-    print(f'geometry:\t{geometry.shape}')
-    print(f'mask:\t{mask.shape}')
+    timer("projection")
+    print(f"rays:\t{rays.shape}")
+    print(f"geometry:\t{geometry.shape}")
+    print(f"mask:\t{mask.shape}")
 
     mask = intersection_loop(rays, geometry, mask)
 
-    timer('intersection')
+    timer("intersection")
     # alert('<done>')
     # print('mask', mask)
     mask = np.repeat(mask, 3)
-    pixels = np.full([h_res * v_res, 3], 0, dtype='uint32')
+    pixels = np.full([h_res * v_res, 3], 0, dtype="uint32")
     np.place(pixels.reshape(-1), mask, 255)
     pixels = pixels.reshape(-1, 3)
     # print(pixels)
@@ -237,13 +239,11 @@ def ray_cast(canvas=None, scene=None, samples=10, reflection_budget=0, refractio
 
 
 if __name__ == "__main__":
-    ray = [0., 0., -1.]  # [ 0.31622777,  0.,         -0.9486833 ]
-    polygon = [[4.,  -3., -10.],
-               [0.,   2., -10.],
-               [-3.,  -1., -10.]]
+    ray = [0.0, 0.0, -1.0]  # [ 0.31622777,  0.,         -0.9486833 ]
+    polygon = [[4.0, -3.0, -10.0], [0.0, 2.0, -10.0], [-3.0, -1.0, -10.0]]
     ray = np.array(ray)
     polygon = np.array(polygon)
     print()
-    timer('init')
+    timer("init")
     print(ray_triangle_intersection(ray, polygon))
-    timer('inter')
+    timer("inter")

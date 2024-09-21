@@ -2,6 +2,7 @@ import time
 from scripts.entity import Entity
 from scripts.vector_math import arbitrary_axis_rotation
 import numpy as np
+
 # from utilities.timer import timer
 # from numba import prange, njit
 # import typing
@@ -12,6 +13,7 @@ class Scene_Object(Entity):
     """a physical object that exists in a scene to be rendered
     info about vertices, faces, textures coordinates, and normals
     material object too, maybe per face"""
+
     count = 0
     list = []
 
@@ -46,16 +48,17 @@ class Scene_Object(Entity):
         self.geometry *= self.scale_factor
 
     @analyze
-    def rotate(self, degrees, local=True, axis='Z'):
+    def rotate(self, degrees, local=True, axis="Z"):
 
         axis = super().rotate(degrees, local=local, axis=axis)
         self.geometry = arbitrary_axis_rotation(
-            self.geometry.reshape(-1, 3), axis, degrees).reshape(-1, 3, 3)
+            self.geometry.reshape(-1, 3), axis, degrees
+        ).reshape(-1, 3, 3)
 
     def origin_to_geometry(self):
         # the resulting global values should be unchanged
         center = np.average(self.geometry.reshape(-1, 3), axis=0)
-        shift = center-self.origin
+        shift = center - self.origin
 
         # print('center', center)
         # print('shift', shift)
@@ -67,7 +70,7 @@ class Scene_Object(Entity):
 
     def geometry_to_origin(self):
         center = np.average(self.geometry.reshape(-1, 3), axis=0)
-        shift = center-self.origin
+        shift = center - self.origin
 
         # self.origin = center
 
@@ -83,10 +86,10 @@ def parse_obj(text):
 
     can only handle triangles
     """
-    prefixes = ['usemtl', 'vt', 'vn', 'v', 'f']
-    occurences = np.array([0,   0,   0,  0,  0])
+    prefixes = ["usemtl", "vt", "vn", "v", "f"]
+    occurences = np.array([0, 0, 0, 0, 0])
 
-    text = text.split('\n')
+    text = text.split("\n")
     prefix_index = 0
     prefix = prefixes[prefix_index]
 
@@ -95,9 +98,9 @@ def parse_obj(text):
     # this mess of a loop finds the number of occurences for every element so a
     # properly sized array can be constructed to contain them
     for line in text:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
-        if '/' in line:
+        if "/" in line:
             slashes = True
 
         for index in range(5):
@@ -120,28 +123,28 @@ def parse_obj(text):
     f_index = 0
 
     for line in text:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
-        elif line.startswith('usemtl'):
+        elif line.startswith("usemtl"):
             mtl = line[7:]
-        elif line.startswith('vt'):
+        elif line.startswith("vt"):
             line = line[2:]
             vt[vt_index] = np.array([float(x) for x in line.split()])
             vt_index += 1
-        elif line.startswith('vn'):
+        elif line.startswith("vn"):
             line = line[2:]
             vn[vn_index] = np.array([float(x) for x in line.split()])
             vn_index += 1
-        elif line.startswith('v'):
+        elif line.startswith("v"):
             line = line[1:]
             v[v_index] = np.array([float(x) for x in line.split()])
             v_index += 1
-        elif line.startswith('f'):
+        elif line.startswith("f"):
             line = line[1:]
-            if '/' in line:
+            if "/" in line:
                 line = line.split()
                 for index in range(3):
-                    numbers = line[index].split('/')
+                    numbers = line[index].split("/")
                     number = np.array([float(x) for x in numbers])
                     f_3d[f_index, index] = number
             else:
@@ -163,6 +166,7 @@ def import_obj(filename):
     # print(f"{round((toc-tic)*1000)}ms")
     return out
 
+
 # @njit(parallel=True)
 
 
@@ -182,7 +186,7 @@ def build_geometry(v, f):
 
 class OBJ(Scene_Object):
     def __init__(self, filepath):
-        self.v, self.vt, self.vn, self.f = import_obj(filepath+'.obj')
+        self.v, self.vt, self.vn, self.f = import_obj(filepath + ".obj")
         geometry = build_geometry(self.v, self.f)
 
         super().__init__(geometry=geometry)
@@ -190,9 +194,9 @@ class OBJ(Scene_Object):
 
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)  # suppresses scientific notation
-    v, vt, vn, f = import_obj('src/models/teapot.obj')
+    v, vt, vn, f = import_obj("src/models/teapot.obj")
 
-    print('v', v.shape)
-    print('vt', vt.shape)
-    print('vn', vn.shape)
-    print('f', f.shape)
+    print("v", v.shape)
+    print("vt", vt.shape)
+    print("vn", vn.shape)
+    print("f", f.shape)

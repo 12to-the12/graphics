@@ -1,10 +1,12 @@
 import tomli
 import types
 
-with open('config.toml', 'rb') as file:
-    try: config_dict = tomli.load(file)
+with open("config.toml", "rb") as file:
+    try:
+        config_dict = tomli.load(file)
     except tomli.TOMLDecodeError:
-        raise Exception('invalid TOML config file')
+        raise Exception("invalid TOML config file")
+
 
 # Define a function to recursively convert nested dictionaries to SimpleNamespace objects
 def to_namespace(obj):
@@ -16,6 +18,7 @@ def to_namespace(obj):
         return [to_namespace(val) for val in obj]
     else:
         return obj
+
 
 # Convert the dictionary into a namespace object
 config = to_namespace(config_dict)

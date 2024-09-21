@@ -1,8 +1,10 @@
 import numpy as np
 from utilities.analysis import analyze
 
+
 class Mesh:
     """a mesh to be rendered"""
+
     def __init__(self):
         pass
 
@@ -20,16 +22,16 @@ class Mesh:
         # print(self.geometry.shape)
         # print('polygon count:',polygon_count)
         for index, object in enumerate(objects):
-            #alert(f'generating mesh for {object.name}')
-            #alert(f'self.geometry {self.geometry.shape}')
-            #alert(f'index {index}')
+            # alert(f'generating mesh for {object.name}')
+            # alert(f'self.geometry {self.geometry.shape}')
+            # alert(f'index {index}')
             # #alert(f'length {object.geometry.shape[0]}')
             # x = object.geometry + object.origin
             # print('x shape',x.shape)
             # print('index',index)
             # print('close index', index+object.geometry.shape[0])
             self.geometry = np.append(self.geometry, object.geometry + object.origin)
-        
+
         self.geometry = self.geometry.reshape(-1, 3, 3)
 
         # print(self.geometry.shape)
@@ -37,8 +39,6 @@ class Mesh:
         # print(self.geometry[6320+5])
         # print(self.geometry[6320+100])
 
-        
-    
     @analyze
     def build_vertex_list(self, objects):
         """generates a list of all vertexes in a scene. Because I want draw_points to work"""
@@ -48,7 +48,4 @@ class Mesh:
         self.v = np.empty([vertex_count, 3])
 
         for index, object in enumerate(objects):
-            self.v[index:index+object.v.shape[0]] = object.v + object.origin
-
-
-    
+            self.v[index : index + object.v.shape[0]] = object.v + object.origin

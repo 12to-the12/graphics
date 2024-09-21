@@ -35289,14 +35289,13 @@ v  -1.0255 -15.6849 15.6491
 v  -0.7217 -15.3873 15.3882
 v  -0.3722 -15.0839 15.1684"""
 import numpy as np
-x = x.split('\n')
-a = np.zeros((len(x),3))
+
+x = x.split("\n")
+a = np.zeros((len(x), 3))
 for index, item in enumerate(x):
     item = item[1:]
-    x,y,z = item.split()
+    x, y, z = item.split()
     x = float(x)
     y = float(y)
     z = float(z)
-    a[index] = np.array([x,y,z])
-
-
+    a[index] = np.array([x, y, z])

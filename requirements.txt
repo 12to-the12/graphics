@@ -5,3 +5,4 @@ pygame==2.3.0
 tomli==2.0.1
 pyglet==2.0.6
 flameprof==0.4
+-e ./mypackage
