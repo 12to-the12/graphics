@@ -31,7 +31,6 @@ screen.set_alpha(None)
 pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
 # def __init__(self, aspect_ratio=1., focal_length=10, sensor_width=10, close_cull=0.1, far_cull=1000): # 23.5
 
-alert("<initializing camera>")
 
 
 from scripts.attempt import a

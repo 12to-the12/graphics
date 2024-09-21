@@ -1,16 +1,17 @@
 print("<importing Scene>")
 from scripts.scene import Scene
+from utilities.alert import alert
 
 
 def teapot_scene(config) -> Scene:
     from scripts.camera import Camera
     from scripts.object import Scene_Object, OBJ
 
+    alert("<initializing camera>")
     camera = Camera(aspect_ratio=(config.window.h_res / config.window.v_res))
+    camera.rotate(config.camera.pitch, axis="x")
+    camera.translate(config.camera.location)
 
-    camera.rotate(90, axis="x")
-
-    camera.translate([0, -25, 0])
     triangle = OBJ("models/triangle")
     triangle.name = "triangle"
 
@@ -31,8 +32,6 @@ def teapot_scene(config) -> Scene:
 
     print("<importing Mesh>")
     from scripts.mesh import Mesh
-
-    
 
     scene = Scene(camera=camera)
     scene.add_object(teapot)

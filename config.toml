@@ -17,12 +17,16 @@ smoothscale = true
 scaling = 1 # horizontal pixels that go into making a single pixel
 
 [camera]
+location = [0,-25,0]
+pitch = 90
+
 focal_length=20
 sensor_width=10
 close_cull=0.1
 far_cull=1000
 
 [scene]
+
 
 [raster]
 occlusion = true
