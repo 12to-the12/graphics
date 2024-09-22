@@ -1,5 +1,6 @@
 import numpy as np
 from utilities.analysis import analyze
+from scripts.object import Scene_Object
 
 
 class Mesh:
@@ -9,7 +10,7 @@ class Mesh:
         pass
 
     @analyze
-    def build(self, objects):
+    def build(self, objects: list[Scene_Object]) -> None:
         # print('\n\n')
         """generates an array of geometry given the inputted objects"""
         polygon_count = 0
@@ -40,7 +41,7 @@ class Mesh:
         # print(self.geometry[6320+100])
 
     @analyze
-    def build_vertex_list(self, objects):
+    def build_vertex_list(self, objects) -> None:
         """generates a list of all vertexes in a scene. Because I want draw_points to work"""
         vertex_count = 0
         for object in objects:

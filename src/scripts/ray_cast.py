@@ -6,6 +6,7 @@ from scripts.vector_math import normalize, norm, normal_of_polygon
 import numpy as np
 from numba import njit, float64, boolean, guvectorize, prange  # type: ignore
 from utilities.alert import alert
+from scripts.scene import Scene
 
 # alert('<top of ray_cast>')
 
@@ -13,8 +14,9 @@ alert("<compiling ray_cast>")
 
 
 @njit(float64(float64[:], float64[:]), cache=True)
-def dot(a, b):
-    return np.sum(a * b)
+def dot(a: np.ndarray, b: np.ndarray) -> float:
+    out: float = np.sum(a * b)
+    return out
 
 
 @njit(float64[:](float64[:], float64[:, :]), cache=True)
@@ -119,7 +121,9 @@ def intersection_loop(rays, geometry, mask):
     return mask
 
 
-def generate_rays(x_res, y_res, z, random=False, norm=True):
+def generate_rays(
+    x_res: int, y_res: int, z: float, random: bool = False, norm: bool = True
+) -> np.ndarray:
     # print('generating rays')
     # print(f'x_res: {x_res}')
     # print(f'y_res: {y_res}')
@@ -157,8 +161,12 @@ def generate_rays(x_res, y_res, z, random=False, norm=True):
 
 # @njit(parallel=True)
 def ray_cast(
-    canvas=None, scene=None, samples=10, reflection_budget=0, refraction_budget=0
-):
+    canvas: pygame.Surface,
+    scene: Scene,
+    samples: int = 10,
+    reflection_budget: int = 0,
+    refraction_budget: int = 0,
+) -> pygame.Surface:
     """
     returns a numpy shape (-1,-1,3) array
 
@@ -241,7 +249,9 @@ if __name__ == "__main__":
 
     ray: np.ndarray = np.array([0.0, 0.0, -1.0])
 
-    polygon: np.ndarray = np.array([[4.0, -3.0, -10.0], [0.0, 2.0, -10.0], [-3.0, -1.0, -10.0]])
+    polygon: np.ndarray = np.array(
+        [[4.0, -3.0, -10.0], [0.0, 2.0, -10.0], [-3.0, -1.0, -10.0]]
+    )
     print()
     timer("init")
     print(ray_triangle_intersection(ray, polygon))

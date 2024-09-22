@@ -3,6 +3,7 @@ from utilities.alert import alert
 from utilities.analysis import analyze
 import numpy as np
 from numpy import linalg
+import pygame
 
 # import numpy.typing as npt
 from scripts.camera import Camera
@@ -135,7 +136,7 @@ def project_in_screen_space(geometry: np.ndarray, camera: Camera) -> np.ndarray:
 
 
 @analyze
-def frustrum_cull(xyw, camera: Camera):
+def frustrum_cull(xyw, camera: Camera) -> np.ndarray:
     """
     receives xyw (-1, 3)
     culls values outside of the viewing frustrum
@@ -176,7 +177,9 @@ def frustrum_cull(xyw, camera: Camera):
 
 
 @analyze
-def project_screen_coordinates(coordinates: np.ndarray, screen) -> np.ndarray:
+def project_screen_coordinates(
+    coordinates: np.ndarray, screen: pygame.Surface
+) -> np.ndarray:
     """
     receives coordinates (-1,2)
 

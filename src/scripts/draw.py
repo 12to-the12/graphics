@@ -1,5 +1,7 @@
 from scripts.geometry_pipeline import *
 from scripts.mesh import Mesh
+from scripts.scene import Scene
+from scripts.camera import Camera
 import pygame
 from utilities.analysis import analyze
 from utilities.config import config
@@ -7,10 +9,16 @@ import random, time
 
 
 @analyze
-def draw_points(canvas=None, scene=None):
-    """a simple renderer that plots vertexes as points on the canvas
+def draw_points(canvas=None, scene=None) -> pygame.Surface:
+    """
+    a simple renderer that plots vertexes as points on the canvas
 
-    returns the canvas"""
+    :param canvas: the surface being drawn to
+    :param scene: the scene being rendered
+    :returns: the resulting 2D image
+    """
+
+
 
     assert canvas, "no canvas for draw_points"
     assert scene, "no scene for draw points"
@@ -52,7 +60,15 @@ background = raster.background
 
 
 @analyze
-def rasterize_polygons(coords=None, canvas=None, width=None):
+def rasterize_polygons(canvas: pygame.Surface, coords=None, width=None) -> None:
+    """
+    idk
+
+    :param canvas: the surface drawn on
+    :param coords: ?
+    :param width: ?
+    :returns: ?
+    """
     assert not coords is None, "coords not defined"
     assert not canvas is None, "canvas not defined"
     assert not width is None, "no width specified"
@@ -72,17 +88,24 @@ def rasterize_polygons(coords=None, canvas=None, width=None):
 
 
 @analyze
-def draw_polygons(canvas=None, scene=None, individual=False):
-    """a simple renderer that draws polygons either as solids or as a wireframe
-
+def draw_polygons(
+    canvas: pygame.Surface, scene: Scene, individual: bool = False
+) -> pygame.Surface:
+    """
+    a simple renderer that draws polygons either as solids or as a wireframe
     kind of inefficient, as it draws every polygon rather than every line segment
+    returns the same canvas
 
-    returns the same canvas"""
+    :param canvas: the surface drawn on
+    :param scene: the scene being rendered
+    :param individual: whether or not to render each polygon individually
+    :returns: returns a 2D surface
+    """
 
     assert canvas, "no canvas for draw_points"
     assert scene, "no scene for draw points"
 
-    camera = scene.camera
+    camera: Camera = scene.camera
 
     canvas.fill(background)  # Fill the display with a solid color
     mesh = Mesh()

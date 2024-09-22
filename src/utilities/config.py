@@ -27,6 +27,5 @@ config = to_namespace(config_dict)
 if config.raster.individual:
     config.window.scaling = 1
 
-
 if __name__ == "__main__":
     print(type(config_dict))

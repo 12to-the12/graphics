@@ -17,7 +17,7 @@ class Scene_Object(Entity):
     count = 0
     list_: list[Entity] = []
 
-    def __init__(self, geometry, name=None):
+    def __init__(self, geometry, name=None) -> None:
         # bounding box, source geometry, translated, shader, textures
         super().__init__()
         self.index = Scene_Object.count
@@ -33,29 +33,29 @@ class Scene_Object(Entity):
         # following subject to transformations
         self.geometry = self.source_geometry
 
-    def get_objects(self):
+    def get_objects(self) -> list:
         return Scene_Object.list_
 
-    def geometry_translate(self, change):
+    def geometry_translate(self, change: np.ndarray) -> None:
         self.geometry += change
 
-    def geometry_scale(self, factor):
+    def geometry_scale(self, factor: float) -> None:
         """only scales in every direction equally"""
         super().scale(factor)
         self.geometry *= factor
 
-    def apply_scale(self):
+    def apply_scale(self) -> None:
         self.geometry *= self.scale_factor
 
     @analyze
-    def rotate(self, degrees, local=True, axis="Z"):
+    def rotate(self, degrees: float, local=True, axis="Z") -> None:
 
         axis = super().rotate(degrees, local=local, axis=axis)
         self.geometry = arbitrary_axis_rotation(
             self.geometry.reshape(-1, 3), axis, degrees
         ).reshape(-1, 3, 3)
 
-    def origin_to_geometry(self):
+    def origin_to_geometry(self) -> None:
         # the resulting global values should be unchanged
         center = np.average(self.geometry.reshape(-1, 3), axis=0)
         shift = center - self.origin
@@ -68,7 +68,7 @@ class Scene_Object(Entity):
 
         self.geometry = self.geometry - shift
 
-    def geometry_to_origin(self):
+    def geometry_to_origin(self) -> None:
         center = np.average(self.geometry.reshape(-1, 3), axis=0)
         shift = center - self.origin
 

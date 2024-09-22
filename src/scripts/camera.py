@@ -47,18 +47,20 @@ class Camera(Entity):
         self.focal_ratio = focal_length / sensor_width  # f-number
 
     @property
-    def horizontal_field_of_view(self):
+    def horizontal_field_of_view(self) -> float:
         return atan(self.sensor_width / (2 * self.focal_length)) * 2  # radians
 
     @property
-    def vertical_field_of_view(self):
+    def vertical_field_of_view(self) -> float:
         return atan(self.sensor_height / (2 * self.focal_length)) * 2  # radians
 
     def orient(self):
         """this function returns the pair of axes and angles
         necessary to rotate the camera's position towards -Z, +Y
         these can be used to apply the inverse to vertexes in the scene
-        to make them rotate relative to the camera"""
+        to make them rotate relative to the camera
+        
+        """
         Z = np.array([0.0, 0.0, 1.0])  #  Z
         n_Z = np.array([0.0, 0.0, -1.0])  # -Z
         Y = np.array([0.0, 1.0, 0.0])  # +Y
