@@ -6,7 +6,7 @@ from scripts.vector_math import (
 )
 from scripts.vector_math import orthogonal, angle
 from utilities.clear_terminal import clear_terminal
-import math
+from math import atan
 from scripts.entity import Entity
 import numpy as np
 from utilities.vectors import *
@@ -20,22 +20,39 @@ class Camera(Entity):
 
     def __init__(
         self,
-        aspect_ratio=1.0,
+        origin=world_origin,
+        aspect_ratio=None,
+        sensor_height=None,  # mm
         focal_length=cam_config.focal_length,
-        sensor_width=cam_config.sensor_width,
+        sensor_width=cam_config.sensor_width,  # mm
         close_cull=cam_config.close_cull,
         far_cull=cam_config.far_cull,
     ):
         """aspect ratio is width over height, ergo width if height was one"""
-        super().__init__(view_vector=n_Z, up_vector=Y)
-        self.aspect_ratio = aspect_ratio
+        super().__init__(origin=origin, view_vector=n_Z, up_vector=Y)
         self.focal_length = focal_length
         self.sensor_width = sensor_width
         self.close_cull = close_cull
         self.far_cull = far_cull
 
-        self.fov = math.degrees(2 * math.atan(sensor_width / (2 * focal_length)))
-        self.focal_ratio = focal_length / sensor_width  # * 2
+        if aspect_ratio is None:
+            self.sensor_height = sensor_height
+            self.aspect_ratio = self.sensor_width / self.sensor_height
+        elif sensor_height is None:
+            self.aspect_ratio = aspect_ratio
+        else:
+            raise Exception("either the aspect ratio or height needs to be defined")
+        self.fov = 2 * atan(sensor_width / (2 * focal_length))  # had to be radians
+
+        self.focal_ratio = focal_length / sensor_width  # f-number
+
+    @property
+    def horizontal_field_of_view(self):
+        return atan(self.sensor_width / (2 * self.focal_length)) * 2  # radians
+
+    @property
+    def vertical_field_of_view(self):
+        return atan(self.sensor_height / (2 * self.focal_length)) * 2  # radians
 
     def orient(self):
         """this function returns the pair of axes and angles
